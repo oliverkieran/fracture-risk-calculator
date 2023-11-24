@@ -1,6 +1,6 @@
 import { InputForm } from "@/components/InputForm";
-import { MainNav } from "@/components/MainNav";
-import { UserNav } from "@/components/UserNav";
+import MainNav from "@/components/MainNav";
+import UserNav from "@/components/UserNav";
 
 export default function App() {
   return (

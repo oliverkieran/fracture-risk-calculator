@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export function MainNav({
+export default function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
@@ -19,7 +19,7 @@ export function MainNav({
         href="#"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Products
+        How does it work?
       </a>
       <a
         href="#"
