@@ -137,8 +137,8 @@ export function InputForm() {
           </div>
         </div>
         <Separator className="my-4" />
-        <div className="flex space-x-2 lg:space-x-4">
-          <div className="w-1/2 border rounded-xl p-2 lg:px-4">
+        <div className="md:flex space-x-2 lg:space-x-4 space-y-4 md:space-y-0">
+          <div className="md:w-1/2 border rounded-xl p-2 lg:px-4">
             <h1 className="text-2xl font-bold mb-2">Anamnesis</h1>
             <div className="space-y-2">
               <div className="grid grid-cols-2">
@@ -211,7 +211,7 @@ export function InputForm() {
               ))}
             </div>
           </div>
-          <div className="w-1/2 space-y-4">
+          <div className="md:w-1/2 space-y-4">
             <div className="h-fit border rounded-xl p-2 lg:px-4">
               <h1 className="text-2xl font-bold mb-2">
                 Bone Density Measurements
