@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,6 +26,7 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 import { FormSchema, formDefaultValues, features } from "./schema";
+import { TreatmentInput } from "@/components/InputForm/TreatmentInput";
 
 export function InputForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -34,21 +34,26 @@ export function InputForm() {
     defaultValues: formDefaultValues,
   });
 
-  const anamnesisFeatures = features.filter(
-    (feature) => feature.category === "anamnesis"
+  const anamnesisBooleanFeatures = features.filter(
+    (feature) => feature.category === "anamnesis" && feature.type === "boolean"
+  );
+  const anamnesisNumberFeatures = features.filter(
+    (feature) => feature.category === "anamnesis" && feature.type === "number"
   );
   const tscoreFeatures = features.filter(
     (feature) => feature.category === "BMD"
   );
-  const treatmentList = features
-    .filter((feature) => feature.category === "treatment")
-    .map((feature) => <li key={feature.id}>{feature.name}</li>);
+  const treatmentFeatures = features.filter(
+    (feature) => feature.category === "treatment"
+  );
 
   const [height, weight] = form.watch(["height", "weight"]);
   const bmi = (weight / (height / 100) ** 2).toFixed(2);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("data", data);
+    const riskScoreDiv = document.getElementById("riskscore");
+    riskScoreDiv?.classList.remove("hidden");
     toast({
       title: "You submitted the following values:",
       description: (
@@ -136,17 +141,62 @@ export function InputForm() {
           <div className="w-1/2 border rounded-xl p-2 lg:px-4">
             <h1 className="text-2xl font-bold mb-2">Anamnesis</h1>
             <div className="space-y-2">
-              {anamnesisFeatures.map((feature) => (
+              <div className="grid grid-cols-2">
+                {anamnesisNumberFeatures.map((feature) => (
+                  <FormField
+                    control={form.control}
+                    key={feature.id}
+                    name={
+                      feature.key as
+                        | "steroid_daily_dosage"
+                        | "number_of_falls"
+                        | "previous_fracture"
+                        | "recent_fracture"
+                    }
+                    render={({ field }) => (
+                      <FormItem className="mb-2">
+                        <FormLabel>{feature.name}</FormLabel>
+                        <FormControl>
+                          <Input type="number" className="w-20" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+              </div>
+              {anamnesisBooleanFeatures.map((feature) => (
                 <FormField
                   control={form.control}
                   key={feature.id}
-                  name="hrt"
+                  name={
+                    feature.key as
+                      | "hip_fracture_parents"
+                      | "osteoporotic_fracture_parents"
+                      | "corticosteroids"
+                      | "aromatase_inhibitors"
+                      | "antiepileptics"
+                      | "rheumatoid_arthritis"
+                      | "ankylosing_spondylitis"
+                      | "immobility"
+                      | "type_1_diabetes"
+                      | "copd"
+                      | "gastrointestinal_disease"
+                      | "early_menopause"
+                      | "hyperpara"
+                      | "malfunction_of_kidney"
+                      | "alcohol"
+                      | "nicotin"
+                      | "decrease_in_height"
+                      | "low_back_pain"
+                      | "hyperkyphosis"
+                  }
                   render={({ field }) => (
                     <FormItem className="w-32">
                       <FormControl>
                         <div className="flex items-center space-x-2 py-1">
                           <Switch
-                            checked={field.value}
+                            checked={field.value as boolean}
                             onCheckedChange={field.onChange}
                           />
                           <Label className="text-base whitespace-nowrap">
@@ -162,7 +212,7 @@ export function InputForm() {
             </div>
           </div>
           <div className="w-1/2 space-y-4">
-            <div className="h-fit border rounded-xl px-2 pt-2 pb-4 lg:px-4">
+            <div className="h-fit border rounded-xl p-2 lg:px-4">
               <h1 className="text-2xl font-bold mb-2">
                 Bone Density Measurements
               </h1>
@@ -179,7 +229,7 @@ export function InputForm() {
                         | "tbs"
                     }
                     render={({ field }) => (
-                      <FormItem className="w-32">
+                      <FormItem className="w-32 mb-2">
                         <FormLabel>{feature.name}</FormLabel>
                         <FormControl>
                           <Input type="number" step="0.1" {...field} />
@@ -193,7 +243,37 @@ export function InputForm() {
             </div>
             <div className="h-fit border rounded-xl px-2 pt-2 pb-4 lg:px-4">
               <h1 className="text-2xl font-bold">Treatment History</h1>
-              <ul>{treatmentList}</ul>
+              {treatmentFeatures.map((feature) => (
+                <div key={feature.id} className="mb-2">
+                  <h2 className="text-base font-medium mb-0.5">
+                    {feature.name}
+                  </h2>
+                  <div className="flex">
+                    <TreatmentInput
+                      form={form}
+                      feature={feature}
+                      treatment="Prior"
+                    />
+                    <TreatmentInput
+                      form={form}
+                      feature={feature}
+                      treatment="Current"
+                    />
+                    <TreatmentInput
+                      form={form}
+                      feature={feature}
+                      treatment="New"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div
+              id="riskscore"
+              className="h-64 border rounded-xl px-2 pt-2 pb-4 lg:px-4 bg-secondary -text--secondary-foreground hidden"
+            >
+              <h1 className="text-2xl font-bold">Risk Score</h1>
+              <div></div>
             </div>
           </div>
         </div>

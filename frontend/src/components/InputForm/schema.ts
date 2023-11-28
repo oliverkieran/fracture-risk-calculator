@@ -1,19 +1,22 @@
 import * as z from "zod";
 
-const features = [
-  {
-    id: 0,
-    name: "HRT",
-    description: "Hormone replacement therapy",
-    category: "anamnesis",
-    key: "hrt",
-  },
+export type Feature = {
+  id: number;
+  name: string;
+  description: string;
+  category: "anamnesis" | "BMD" | "treatment";
+  key: string;
+  type: "boolean" | "number" | "array";
+};
+
+export const features: Feature[] = [
   {
     id: 1,
     name: "Hip Fracture Parents",
     description: "Hip fracture in parents",
     category: "anamnesis",
     key: "hip_fracture_parents",
+    type: "boolean",
   },
   {
     id: 2,
@@ -21,6 +24,7 @@ const features = [
     description: "Osteoporotic fracture in parents",
     category: "anamnesis",
     key: "osteoporotic_fracture_parents",
+    type: "boolean",
   },
   {
     id: 3,
@@ -28,6 +32,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "corticosteroids",
+    type: "boolean",
   },
   {
     id: 4,
@@ -35,6 +40,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "steroid_daily_dosage",
+    type: "number",
   },
   {
     id: 5,
@@ -42,6 +48,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "aromatase_inhibitors",
+    type: "boolean",
   },
   {
     id: 6,
@@ -49,6 +56,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "antiepileptics",
+    type: "boolean",
   },
   {
     id: 7,
@@ -56,6 +64,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "rheumatoid_arthritis",
+    type: "boolean",
   },
   {
     id: 8,
@@ -63,6 +72,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "ankylosing_spondylitis",
+    type: "boolean",
   },
   {
     id: 9,
@@ -70,6 +80,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "number_of_falls",
+    type: "number",
   },
   {
     id: 10,
@@ -77,6 +88,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "immobility",
+    type: "boolean",
   },
   {
     id: 11,
@@ -84,6 +96,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "type_1_diabetes",
+    type: "boolean",
   },
   {
     id: 12,
@@ -91,6 +104,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "copd",
+    type: "boolean",
   },
   {
     id: 13,
@@ -98,6 +112,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "gastrointestinal_disease",
+    type: "boolean",
   },
   {
     id: 14,
@@ -105,6 +120,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "early_menopause",
+    type: "boolean",
   },
   {
     id: 15,
@@ -112,6 +128,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "hyperpara",
+    type: "boolean",
   },
   {
     id: 16,
@@ -119,6 +136,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "malfunction_of_kidney",
+    type: "boolean",
   },
   {
     id: 17,
@@ -126,6 +144,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "alcohol",
+    type: "boolean",
   },
   {
     id: 18,
@@ -133,6 +152,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "nicotin",
+    type: "boolean",
   },
   {
     id: 19,
@@ -140,6 +160,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "decrease_in_height",
+    type: "boolean",
   },
   {
     id: 20,
@@ -147,6 +168,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "low_back_pain",
+    type: "boolean",
   },
   {
     id: 21,
@@ -154,6 +176,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "hyperkyphosis",
+    type: "boolean",
   },
   {
     id: 22,
@@ -161,6 +184,7 @@ const features = [
     description: "",
     category: "anamnesis",
     key: "previous_fracture",
+    type: "number",
   },
   {
     id: 23,
@@ -168,6 +192,7 @@ const features = [
     description: "A fracture in the last 2 years.",
     category: "anamnesis",
     key: "recent_fracture",
+    type: "number",
   },
   {
     id: 24,
@@ -175,6 +200,7 @@ const features = [
     description: "",
     category: "BMD",
     key: "tscore_neck",
+    type: "number",
   },
   {
     id: 25,
@@ -182,6 +208,7 @@ const features = [
     description: "",
     category: "BMD",
     key: "tscore_total_hip",
+    type: "number",
   },
   {
     id: 26,
@@ -189,6 +216,7 @@ const features = [
     description: "",
     category: "BMD",
     key: "tscore_ls",
+    type: "number",
   },
   {
     id: 27,
@@ -196,13 +224,15 @@ const features = [
     description: "Trabecular Bone Score",
     category: "BMD",
     key: "tbs",
+    type: "number",
   },
   {
     id: 28,
-    name: "Bisphosphonates",
+    name: "Bisphosphonate",
     description: "",
     category: "treatment",
-    key: "bisphosphonates",
+    key: "bisphosphonate",
+    type: "array",
   },
   {
     id: 29,
@@ -210,6 +240,7 @@ const features = [
     description: "",
     category: "treatment",
     key: "denosumab",
+    type: "array",
   },
   {
     id: 30,
@@ -217,6 +248,7 @@ const features = [
     description: "Selective Estrogen Receptor Modulator",
     category: "treatment",
     key: "serm",
+    type: "array",
   },
   {
     id: 31,
@@ -224,6 +256,7 @@ const features = [
     description: "",
     category: "treatment",
     key: "teriparatide",
+    type: "array",
   },
   {
     id: 32,
@@ -231,12 +264,13 @@ const features = [
     description: "Hormone Replacement Therapy",
     category: "treatment",
     key: "hrt",
+    type: "array",
   },
 ];
 
-const FormSchema = z.object({
+export const FormSchema = z.object({
   sex: z.string().startsWith("female", {
-    message: "Amelia is currently only available for female patients.",
+    message: "Bono is currently only available for female patients.",
   }),
   age: z.coerce
     .number()
@@ -250,30 +284,71 @@ const FormSchema = z.object({
     .number()
     .min(20, { message: "Height must be greater than 20." })
     .max(400, { message: "Height must be less than 400." }),
-  hrt: z.boolean().default(false).optional(),
+  hip_fracture_parents: z.boolean().default(false).optional(),
+  osteoporotic_fracture_parents: z.boolean().default(false).optional(),
+  corticosteroids: z.boolean().default(false).optional(),
+  steroid_daily_dosage: z.coerce
+    .number()
+    .min(0, { message: "Steroid daily dosage must be greater or equal to 0." })
+    .max(100, { message: "Steroid daily dosage must be less than 100." })
+    .default(0)
+    .optional(),
+  aromatase_inhibitors: z.boolean().default(false).optional(),
+  antiepileptics: z.boolean().default(false).optional(),
+  rheumatoid_arthritis: z.boolean().default(false).optional(),
+  ankylosing_spondylitis: z.boolean().default(false).optional(),
+  number_of_falls: z.coerce.number().min(0).max(100).default(0).optional(),
+  immobility: z.boolean().default(false).optional(),
+  type_1_diabetes: z.boolean().default(false).optional(),
+  copd: z.boolean().default(false).optional(),
+  gastrointestinal_disease: z.boolean().default(false).optional(),
+  early_menopause: z.boolean().default(false).optional(),
+  hyperpara: z.boolean().default(false).optional(),
+  malfunction_of_kidney: z.boolean().default(false).optional(),
+  alcohol: z.boolean().default(false).optional(),
+  nicotin: z.boolean().default(false).optional(),
+  decrease_in_height: z.boolean().default(false).optional(),
+  low_back_pain: z.boolean().default(false).optional(),
+  hyperkyphosis: z.boolean().default(false).optional(),
+  previous_fracture: z.coerce.number().min(0).max(20).default(0).optional(),
+  recent_fracture: z.coerce.number().min(0).max(10).default(0).optional(),
   tscore_neck: z.coerce
-    .number({ invalid_type_error: "Please enter a T-score." })
+    .number({ invalid_type_error: "Enter a T-score." })
     .min(-10)
     .max(10),
   tscore_total_hip: z.coerce
-    .number({ invalid_type_error: "Please enter a T-score." })
+    .number({ invalid_type_error: "Enter a T-score." })
     .min(-10)
     .max(10),
   tscore_ls: z.coerce
-    .number({ invalid_type_error: "Please enter a T-score." })
+    .number({ invalid_type_error: "Enter a T-score." })
     .min(-10)
     .max(10),
-  tbs: z.coerce
-    .number({ invalid_type_error: "Please enter a TBS." })
-    .min(0)
-    .max(2),
+  tbs: z.coerce.number({ invalid_type_error: "Enter a TBS." }).min(0).max(2),
+  bisphosphonate_prior: z.boolean().default(false).optional(),
+  bisphosphonate_current: z.boolean().default(false).optional(),
+  bisphosphonate_new: z.boolean().default(false).optional(),
+  denosumab_prior: z.boolean().default(false).optional(),
+  denosumab_current: z.boolean().default(false).optional(),
+  denosumab_new: z.boolean().default(false).optional(),
+  serm_prior: z.boolean().default(false).optional(),
+  serm_current: z.boolean().default(false).optional(),
+  serm_new: z.boolean().default(false).optional(),
+  teriparatide_prior: z.boolean().default(false).optional(),
+  teriparatide_current: z.boolean().default(false).optional(),
+  teriparatide_new: z.boolean().default(false).optional(),
+  hrt_prior: z.boolean().default(false).optional(),
+  hrt_current: z.boolean().default(false).optional(),
+  hrt_new: z.boolean().default(false).optional(),
 });
 
-const formDefaultValues = {
+export const formDefaultValues = {
   sex: "female",
   age: 65,
   height: 160,
   weight: 60,
+  steroid_daily_dosage: 0,
+  number_of_falls: 0,
+  previous_fracture: 0,
+  recent_fracture: 0,
 };
-
-export { FormSchema, formDefaultValues, features };
