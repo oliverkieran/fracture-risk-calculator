@@ -18,7 +18,7 @@ This is the source code of Bono AI, a machine learning project that aims to comp
 
 ### Frontend
 
-The frontend is built with [React](https://react.dev/) and [shadcn/ui](https://ui.shadcn.com/). Requests to the backend are made with [Axios](https://axios-http.com/).
+The frontend is built with [React](https://react.dev/), TypeScript and [shadcn/ui](https://ui.shadcn.com/). Requests to the backend are made with [Axios](https://axios-http.com/).
 
 ### Backend
 
