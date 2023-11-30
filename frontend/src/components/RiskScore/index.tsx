@@ -5,9 +5,23 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-export function RiskScore({ risk = -1 }: { risk: number }) {
-  const fx_types = ["vertebral", "hip", "any"];
+type RiskScoreProps = {
+  vertebral: number;
+  hip: number;
+  any: number;
+};
+
+export function RiskScore({ risks }: { risks: RiskScoreProps }) {
+  const fx_types: (keyof RiskScoreProps)[] = ["vertebral", "hip", "any"];
+
+  const getColorClass = (risk: number) => {
+    if (risk < 0.1) return "bg-green-400/75";
+    if (risk > 0.25) return "bg-red-400/75";
+    return "bg-amber-400/75";
+  };
+
   return (
     <Card className="bg-accent">
       <CardHeader>
@@ -19,11 +33,17 @@ export function RiskScore({ risk = -1 }: { risk: number }) {
       <CardContent>
         <div className="grid grid-cols-3 gap-4">
           {fx_types.map((fx_type) => (
-            <div key={fx_type} className="p-2 bg-green-400/75 rounded-md">
+            <div
+              key={fx_type}
+              className={cn(
+                "p-2 bg-green-400/75 rounded-md",
+                getColorClass(risks[fx_type])
+              )}
+            >
               <p className="font-semibold">
                 {fx_type.charAt(0).toUpperCase() + fx_type.slice(1)}
               </p>
-              <p> {risk}</p>
+              <p> {risks[fx_type]}</p>
             </div>
           ))}
         </div>

@@ -17,7 +17,16 @@ def getRisk(request):
         data["bmi"] = round(data["weight"] / ((data["height"] / 100) ** 2), 2)
 
         # serializer.save()
-        return Response({"message": "Risk score successfully calculated.", "risk": 0.5})
+        return Response(
+            {
+                "message": "Risk score successfully calculated.",
+                "risks": {
+                    "vertebral": 0.05,
+                    "hip": 0.13,
+                    "any": 0.4,
+                },
+            }
+        )
     else:
         print("Errors:", serializer.errors)
         return Response(serializer.errors)

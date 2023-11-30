@@ -7,7 +7,13 @@ import * as z from "zod";
 import axios from "axios";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardDescription,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -53,7 +59,7 @@ export function InputForm() {
   const [height, weight] = form.watch(["height", "weight"]);
   const bmi = (weight / (height / 100) ** 2).toFixed(2);
 
-  const [risk, setRisk] = useState(-1);
+  const [risks, setRisks] = useState({ vertebral: -1, hip: -1, any: -1 });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Sending data to backend:", data);
@@ -65,8 +71,8 @@ export function InputForm() {
       data: data,
     }).then((response) => {
       console.log("Received response from backend:", response.data);
-      const computedRisk = response.data.risk;
-      setRisk(computedRisk);
+      const computedRisks = response.data.risks;
+      setRisks(computedRisks);
     });
   }
 
@@ -225,8 +231,11 @@ export function InputForm() {
             <Card>
               <CardHeader>
                 <CardTitle>Bone Density Measurements</CardTitle>
+                <CardDescription className="text-base">
+                  All values should be entered as T-scores.
+                </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="grid grid-cols-2">
                 {tscoreFeatures.map((feature) => (
                   <FormField
                     control={form.control}
@@ -282,7 +291,7 @@ export function InputForm() {
                 ))}
               </CardContent>
             </Card>
-            {risk >= 0 && <RiskScore risk={risk} />}
+            {risks.any >= 0 && <RiskScore risks={risks} />}
           </div>
         </div>
 
