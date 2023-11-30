@@ -24,7 +24,7 @@ class Patient(models.Model):
     gastrointestinal_disease = models.BooleanField()
     early_menopause = models.BooleanField()
     hyperpara = models.BooleanField()
-    malfunction_of_kidney = models.BooleanField()
+    falling_test_abnormal = models.BooleanField()
     alcohol = models.BooleanField()
     nicotin = models.BooleanField()
     decrease_in_height = models.BooleanField()

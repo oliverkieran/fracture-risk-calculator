@@ -199,7 +199,7 @@ export function InputForm() {
                         | "gastrointestinal_disease"
                         | "early_menopause"
                         | "hyperpara"
-                        | "malfunction_of_kidney"
+                        | "falling_test_abnormal"
                         | "alcohol"
                         | "nicotin"
                         | "decrease_in_height"
