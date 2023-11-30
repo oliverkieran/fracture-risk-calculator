@@ -7,6 +7,7 @@ import * as z from "zod";
 import axios from "axios";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -143,26 +144,74 @@ export function InputForm() {
         </div>
         <Separator className="my-4" />
         <div className="md:flex space-x-2 lg:space-x-4 space-y-4 md:space-y-0">
-          <div className="md:w-1/2 border rounded-xl p-2 lg:px-4">
-            <h1 className="text-2xl font-bold mb-2">Anamnesis</h1>
-            <div className="space-y-2">
-              <div className="grid grid-cols-2">
-                {anamnesisNumberFeatures.map((feature) => (
+          <Card className="md:w-1/2">
+            <CardHeader>
+              <CardTitle>Anamnesis</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="grid grid-cols-2">
+                  {anamnesisNumberFeatures.map((feature) => (
+                    <FormField
+                      control={form.control}
+                      key={feature.id}
+                      name={
+                        feature.key as
+                          | "steroid_daily_dosage"
+                          | "number_of_falls"
+                          | "previous_fracture"
+                          | "recent_fracture"
+                      }
+                      render={({ field }) => (
+                        <FormItem className="mb-2">
+                          <FormLabel>{feature.name}</FormLabel>
+                          <FormControl>
+                            <Input type="number" className="w-20" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                </div>
+                {anamnesisBooleanFeatures.map((feature) => (
                   <FormField
                     control={form.control}
                     key={feature.id}
                     name={
                       feature.key as
-                        | "steroid_daily_dosage"
-                        | "number_of_falls"
-                        | "previous_fracture"
-                        | "recent_fracture"
+                        | "hip_fracture_parents"
+                        | "osteoporotic_fracture_parents"
+                        | "corticosteroids"
+                        | "aromatase_inhibitors"
+                        | "antiepileptics"
+                        | "rheumatoid_arthritis"
+                        | "ankylosing_spondylitis"
+                        | "immobility"
+                        | "type_1_diabetes"
+                        | "copd"
+                        | "gastrointestinal_disease"
+                        | "early_menopause"
+                        | "hyperpara"
+                        | "malfunction_of_kidney"
+                        | "alcohol"
+                        | "nicotin"
+                        | "decrease_in_height"
+                        | "low_back_pain"
+                        | "hyperkyphosis"
                     }
                     render={({ field }) => (
-                      <FormItem className="mb-2">
-                        <FormLabel>{feature.name}</FormLabel>
+                      <FormItem className="w-32">
                         <FormControl>
-                          <Input type="number" className="w-20" {...field} />
+                          <div className="flex items-center space-x-2 py-1">
+                            <Switch
+                              checked={field.value as boolean}
+                              onCheckedChange={field.onChange}
+                            />
+                            <Label className="text-base whitespace-nowrap">
+                              {feature.name}
+                            </Label>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -170,58 +219,14 @@ export function InputForm() {
                   />
                 ))}
               </div>
-              {anamnesisBooleanFeatures.map((feature) => (
-                <FormField
-                  control={form.control}
-                  key={feature.id}
-                  name={
-                    feature.key as
-                      | "hip_fracture_parents"
-                      | "osteoporotic_fracture_parents"
-                      | "corticosteroids"
-                      | "aromatase_inhibitors"
-                      | "antiepileptics"
-                      | "rheumatoid_arthritis"
-                      | "ankylosing_spondylitis"
-                      | "immobility"
-                      | "type_1_diabetes"
-                      | "copd"
-                      | "gastrointestinal_disease"
-                      | "early_menopause"
-                      | "hyperpara"
-                      | "malfunction_of_kidney"
-                      | "alcohol"
-                      | "nicotin"
-                      | "decrease_in_height"
-                      | "low_back_pain"
-                      | "hyperkyphosis"
-                  }
-                  render={({ field }) => (
-                    <FormItem className="w-32">
-                      <FormControl>
-                        <div className="flex items-center space-x-2 py-1">
-                          <Switch
-                            checked={field.value as boolean}
-                            onCheckedChange={field.onChange}
-                          />
-                          <Label className="text-base whitespace-nowrap">
-                            {feature.name}
-                          </Label>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
           <div className="md:w-1/2 space-y-4">
-            <div className="h-fit border rounded-xl p-2 lg:px-4">
-              <h1 className="text-2xl font-bold mb-2">
-                Bone Density Measurements
-              </h1>
-              <div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Bone Density Measurements</CardTitle>
+              </CardHeader>
+              <CardContent>
                 {tscoreFeatures.map((feature) => (
                   <FormField
                     control={form.control}
@@ -244,35 +249,39 @@ export function InputForm() {
                     )}
                   />
                 ))}
-              </div>
-            </div>
-            <div className="h-fit border rounded-xl px-2 pt-2 pb-4 lg:px-4">
-              <h1 className="text-2xl font-bold">Treatment History</h1>
-              {treatmentFeatures.map((feature) => (
-                <div key={feature.id} className="mb-2">
-                  <h2 className="text-base font-medium mb-0.5">
-                    {feature.name}
-                  </h2>
-                  <div className="flex">
-                    <TreatmentInput
-                      form={form}
-                      feature={feature}
-                      treatment="Prior"
-                    />
-                    <TreatmentInput
-                      form={form}
-                      feature={feature}
-                      treatment="Current"
-                    />
-                    <TreatmentInput
-                      form={form}
-                      feature={feature}
-                      treatment="New"
-                    />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Treatment History</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {treatmentFeatures.map((feature) => (
+                  <div key={feature.id} className="mb-2">
+                    <h2 className="text-base font-medium mb-0.5">
+                      {feature.name}
+                    </h2>
+                    <div className="flex">
+                      <TreatmentInput
+                        form={form}
+                        feature={feature}
+                        treatment="Prior"
+                      />
+                      <TreatmentInput
+                        form={form}
+                        feature={feature}
+                        treatment="Current"
+                      />
+                      <TreatmentInput
+                        form={form}
+                        feature={feature}
+                        treatment="New"
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </CardContent>
+            </Card>
             {risk >= 0 && <RiskScore risk={risk} />}
           </div>
         </div>
