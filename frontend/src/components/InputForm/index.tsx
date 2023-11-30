@@ -273,7 +273,7 @@ export function InputForm() {
                 </div>
               ))}
             </div>
-            <RiskScore risk={risk} />
+            {risk >= 0 && <RiskScore risk={risk} />}
           </div>
         </div>
 

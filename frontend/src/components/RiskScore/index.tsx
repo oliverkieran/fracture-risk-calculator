@@ -1,18 +1,33 @@
-import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
 export function RiskScore({ risk = -1 }: { risk: number }) {
-  const display = risk === -1 ? "hidden" : "block";
+  const fx_types = ["vertebral", "hip", "any"];
   return (
-    <div
-      className={cn(
-        "h-64 border rounded-xl px-2 pt-2 pb-4 lg:px-4 bg-secondary -text--secondary-foreground hidden",
-        display
-      )}
-    >
-      <h1 className="text-2xl font-bold">2-year Fracture Risk:</h1>
-      <p>Vertebral Risk: {risk}</p>
-      <p>Hip Risk: {risk}</p>
-      <p>Any Risk: {risk}</p>
-    </div>
+    <Card className="bg-accent">
+      <CardHeader>
+        <CardTitle>Risk Score</CardTitle>
+        <CardDescription className="text-base">
+          2-year fracture risk score at different sites.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-3 gap-4">
+          {fx_types.map((fx_type) => (
+            <div key={fx_type} className="p-2 bg-green-400/75 rounded-md">
+              <p className="font-semibold">
+                {fx_type.charAt(0).toUpperCase() + fx_type.slice(1)}
+              </p>
+              <p> {risk}</p>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
