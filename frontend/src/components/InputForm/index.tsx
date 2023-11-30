@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,8 +26,8 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "@/components/ui/use-toast";
 import { FormSchema, formDefaultValues, features } from "./schema";
+import { RiskScore } from "@/components/RiskScore";
 import { TreatmentInput } from "@/components/InputForm/TreatmentInput";
 
 export function InputForm() {
@@ -50,17 +52,20 @@ export function InputForm() {
   const [height, weight] = form.watch(["height", "weight"]);
   const bmi = (weight / (height / 100) ** 2).toFixed(2);
 
+  const [risk, setRisk] = useState(-1);
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("data", data);
-    const riskScoreDiv = document.getElementById("riskscore");
-    riskScoreDiv?.classList.remove("hidden");
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    console.log("Sending data to backend:", data);
+
+    // send data to backend
+    axios({
+      method: "post",
+      url: "http://localhost:8000/api/getRisk/",
+      data: data,
+    }).then((response) => {
+      console.log("Received response from backend:", response.data);
+      const computedRisk = response.data.risk;
+      setRisk(computedRisk);
     });
   }
 
@@ -268,13 +273,7 @@ export function InputForm() {
                 </div>
               ))}
             </div>
-            <div
-              id="riskscore"
-              className="h-64 border rounded-xl px-2 pt-2 pb-4 lg:px-4 bg-secondary -text--secondary-foreground hidden"
-            >
-              <h1 className="text-2xl font-bold">Risk Score</h1>
-              <div></div>
-            </div>
+            <RiskScore risk={risk} />
           </div>
         </div>
 

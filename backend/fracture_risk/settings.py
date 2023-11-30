@@ -60,7 +60,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "http://localhost:5173",  # IMPORTANT: this must be the same as the frontend
 ]
 
 ROOT_URLCONF = "fracture_risk.urls"
