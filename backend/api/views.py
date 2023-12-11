@@ -1,9 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Patient
 from .serializers import PatientSerializer
 from fracture_risk.ml.risk_calculator import BonoAI
 

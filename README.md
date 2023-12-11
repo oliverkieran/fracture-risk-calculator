@@ -34,11 +34,22 @@ The frontend is built with [React](https://react.dev/), TypeScript and [shadcn/u
 
 The backend is built with [Django](https://www.djangoproject.com/). The backend will expose an API via [Django Rest Framework](https://www.django-rest-framework.org/) which will give the frontend the necessary endpoints to request risk scores or SHAP plots. The backend is also responsible for storing the risk scores in a PostgreSQL database. More information on how to install and setup Django with PostgreSQL can be found [here](https://djangocentral.com/using-postgresql-with-django/).
 
+#### Dependencies
+
+- pandas
+- numpy
+- xgboost
+- sksurv
+- shap
+- django
+- django-rest-framework
+- django-cors-headers
+- psycopg2
+- gunicorn
+
 ### Deployment
 
-The website is planned to be deployed on a AWS EC2 instance, maybe including Docker, but this is not yet decided. I also want to investigate AWS Lambda and AWS API Gateway as a possible deployment option.
-
-Another possibility is to deploy the website on [Heroku](https://www.heroku.com/).
+The frontend and the backend are deployed separately. Both are deployed on [render](https://render.com/).
 
 ## Notes
 
