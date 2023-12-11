@@ -7,6 +7,9 @@ services:
   - type: web
     name: fracture_risk
     runtime: python
+    branch: master
+    rootDir: backend
+    region: frankfurt
     buildCommand: "./build.sh"
     startCommand: "gunicorn fracture_risk.wsgi:application"
     envVars:
