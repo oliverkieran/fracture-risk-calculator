@@ -67,7 +67,7 @@ export function InputForm() {
     // send data to backend
     axios({
       method: "post",
-      url: "http://localhost:8000/api/getRisk/",
+      url: "https://fracture-risk.onrender.com/api/getRisk/",
       data: data,
     }).then((response) => {
       console.log("Received response from backend:", response.data);

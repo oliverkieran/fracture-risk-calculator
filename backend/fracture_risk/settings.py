@@ -64,6 +64,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # IMPORTANT: this must be the same as the frontend
+    "https://fracture-risk.onrender.com",
 ]
 
 ROOT_URLCONF = "fracture_risk.urls"
