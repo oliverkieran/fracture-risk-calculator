@@ -1,6 +1,7 @@
 Django==4.2.7
 django-cors-headers==4.3.1
 djangorestframework==3.14.0
+dj_database_url==2.1.0
 psycopg2==2.9.3
 gunicorn==21.2.0
 numpy==1.26.2
