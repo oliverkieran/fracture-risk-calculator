@@ -1,12 +1,12 @@
 databases:
-  - name: fracture_risk
+  - name: BonoAI-DB
     databaseName: fracture_risk
     user: fracture_risk
     region: frankfurt
 
 services:
   - type: web
-    name: fracture_risk
+    name: BonoAI-backend
     runtime: python
     branch: master
     rootDir: backend
