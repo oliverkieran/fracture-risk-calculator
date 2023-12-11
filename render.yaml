@@ -2,6 +2,7 @@ databases:
   - name: fracture_risk
     databaseName: fracture_risk
     user: fracture_risk
+    region: frankfurt
 
 services:
   - type: web
