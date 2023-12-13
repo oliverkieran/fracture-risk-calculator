@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import axios from "axios";
 
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,6 +34,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 import { FormSchema, formDefaultValues, features } from "./schema";
 import { RiskScore } from "@/components/RiskScore";
 import { TreatmentInput } from "@/components/InputForm/TreatmentInput";
@@ -59,20 +61,33 @@ export function InputForm() {
   const [height, weight] = form.watch(["height", "weight"]);
   const bmi = (weight / (height / 100) ** 2).toFixed(2);
 
-  const [risks, setRisks] = useState({ vertebral: -1, hip: -1, any: -1 });
+  const [riskHorizion, setRiskHorizon] = useState("2");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [risks, setRisks] = useState({ vertebral: -1, hip: -1, any: -1 });
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Sending data to backend:", data);
+    setIsSubmitting(true);
+
+    const requestData = {
+      riskHorizon: riskHorizion,
+      patientData: data,
+    };
 
     // send data to backend
+    const baseURL = import.meta.env.PROD
+      ? "https://fracture-risk.onrender.com"
+      : "http://localhost:8000";
     axios({
       method: "post",
-      url: "https://fracture-risk.onrender.com/api/getRisk/",
-      data: data,
+      //url: "https://fracture-risk.onrender.com/api/getRisk/",
+      url: baseURL + "/api/getRisk/",
+      data: requestData,
     }).then((response) => {
       console.log("Received response from backend:", response.data);
       const computedRisks = response.data.risks;
       setRisks(computedRisks);
+      setIsSubmitting(false);
     });
   }
 
@@ -296,9 +311,38 @@ export function InputForm() {
         </div>
 
         <Separator className="my-4" />
-        <Button type="submit" className="bg-primary hover:bg-blue-700">
-          Compute Risk
-        </Button>
+        <div className="flex items-center justify-between px-2 pb-4">
+          <div className="space-y-2">
+            <Label>Time horizon</Label>
+            <Select onValueChange={setRiskHorizon}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a time horizon" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1 year</SelectItem>
+                <SelectItem value="2">2 years</SelectItem>
+                <SelectItem value="3">3 years</SelectItem>
+                <SelectItem value="4">4 years</SelectItem>
+                <SelectItem value="5">5 years</SelectItem>
+                <SelectItem value="6">6 years</SelectItem>
+                <SelectItem value="7">7 years</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <Button
+            type="submit"
+            className="bg-primary hover:bg-blue-700"
+            disabled={isSubmitting}
+          >
+            <Loader2
+              className={cn(
+                "mr-2 h-4 w-4 animate-spin",
+                isSubmitting ? "block" : "hidden"
+              )}
+            />
+            Compute Risk
+          </Button>
+        </div>
       </form>
     </Form>
   );
