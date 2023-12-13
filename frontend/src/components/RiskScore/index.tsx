@@ -18,7 +18,7 @@ export function RiskScore({
   riskHorizon = "2",
 }: {
   risks: RiskScoreProps;
-  timeHorizon: string;
+  riskHorizon: string;
 }) {
   const fx_types: (keyof RiskScoreProps)[] = ["vertebral", "hip", "any"];
 
