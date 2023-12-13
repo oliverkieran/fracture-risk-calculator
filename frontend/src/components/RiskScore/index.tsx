@@ -13,7 +13,13 @@ type RiskScoreProps = {
   any: number;
 };
 
-export function RiskScore({ risks }: { risks: RiskScoreProps }) {
+export function RiskScore({
+  risks,
+  riskHorizon = "2",
+}: {
+  risks: RiskScoreProps;
+  timeHorizon: string;
+}) {
   const fx_types: (keyof RiskScoreProps)[] = ["vertebral", "hip", "any"];
 
   const getColorClass = (risk: number) => {
@@ -27,7 +33,7 @@ export function RiskScore({ risks }: { risks: RiskScoreProps }) {
       <CardHeader>
         <CardTitle>Risk Score</CardTitle>
         <CardDescription className="text-base">
-          2-year fracture risk score at different sites.
+          {`${riskHorizon}-year fracture risk score at different sites.`}
         </CardDescription>
       </CardHeader>
       <CardContent>

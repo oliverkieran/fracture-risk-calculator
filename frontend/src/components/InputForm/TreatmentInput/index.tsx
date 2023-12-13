@@ -18,7 +18,7 @@ const TreatmentCheckbox = React.forwardRef<
     <CheckboxPrimitive.Root
       ref={ref}
       className={cn(
-        "peer h-10 w-32 shrink-0 border border-slate-200 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary/90 data-[state=checked]:text-slate-50 dark:border-slate-800 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 dark:data-[state=checked]:bg-slate-50 dark:data-[state=checked]:text-slate-900",
+        "peer h-10 w-24 md:w-32 shrink-0 border border-slate-200 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary/90 data-[state=checked]:text-slate-50 dark:border-slate-800 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 dark:data-[state=checked]:bg-slate-50 dark:data-[state=checked]:text-slate-900",
         className
       )}
       {...props}
@@ -52,7 +52,7 @@ export function TreatmentInput({
       control={form.control}
       name={featureKey}
       render={({ field }) => (
-        <FormItem className="w-32">
+        <FormItem className="w-24 md:w-32">
           <FormControl>
             <div className="flex items-center space-x-2 py-1">
               <TreatmentCheckbox

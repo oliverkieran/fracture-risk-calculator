@@ -94,7 +94,7 @@ export function InputForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-        <div className="flex gap-4 p-2">
+        <div className="space-y-4 md:flex md:gap-4 md:space-y-0 p-2">
           <FormField
             control={form.control}
             name="sex"
@@ -119,46 +119,48 @@ export function InputForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="age"
-            render={({ field }) => (
-              <FormItem className="w-20">
-                <FormLabel>Age</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="height"
-            render={({ field }) => (
-              <FormItem className="w-20">
-                <FormLabel>Height</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="weight"
-            render={({ field }) => (
-              <FormItem className="w-20">
-                <FormLabel>Weight</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex items-center space-x-2 rounded-md w-32 bg-primary/20 px-3 border border-slate-200">
+          <div className="flex md:flex-none gap-4">
+            <FormField
+              control={form.control}
+              name="age"
+              render={({ field }) => (
+                <FormItem className="w-20">
+                  <FormLabel>Age</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="height"
+              render={({ field }) => (
+                <FormItem className="w-20">
+                  <FormLabel>Height</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="weight"
+              render={({ field }) => (
+                <FormItem className="w-20">
+                  <FormLabel>Weight</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex items-center space-x-2 rounded-md bg-primary/20 px-3 border border-slate-200 h-14 w-32 md:h-auto ">
             <Label>BMI:</Label>
             <p className="text-sm">{bmi}</p>
           </div>
@@ -306,12 +308,14 @@ export function InputForm() {
                 ))}
               </CardContent>
             </Card>
-            {risks.any >= 0 && <RiskScore risks={risks} />}
+            {risks.any >= 0 && (
+              <RiskScore risks={risks} riskHorizon={riskHorizion} />
+            )}
           </div>
         </div>
 
         <Separator className="my-4" />
-        <div className="flex items-center justify-between px-2 pb-4">
+        <div className="flex items-end justify-between px-2 pb-4">
           <div className="space-y-2">
             <Label>Time horizon</Label>
             <Select onValueChange={setRiskHorizon}>
