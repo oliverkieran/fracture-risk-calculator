@@ -94,7 +94,7 @@ export function InputForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-        <div className="space-y-4 md:flex md:gap-4 md:space-y-0 p-2">
+        <div className="space-y-4 md:flex md:gap-4 md:space-y-0 p-2 bg-card -text--card-foreground">
           <FormField
             control={form.control}
             name="sex"
@@ -160,7 +160,7 @@ export function InputForm() {
               )}
             />
           </div>
-          <div className="flex items-center space-x-2 rounded-md bg-primary/20 px-3 border border-slate-200 h-14 w-32 md:h-auto ">
+          <div className="flex items-center space-x-2 rounded-md bg-primary/20 dark:bg-primary/80 px-3 border border-border h-14 w-32 md:h-auto ">
             <Label>BMI:</Label>
             <p className="text-sm">{bmi}</p>
           </div>
@@ -315,7 +315,7 @@ export function InputForm() {
         </div>
 
         <Separator className="my-4" />
-        <div className="flex items-end justify-between px-2 pb-4">
+        <div className="flex items-end justify-between px-2 pb-4 bg-card -text--card-foreground">
           <div className="space-y-2">
             <Label>Time horizon</Label>
             <Select onValueChange={setRiskHorizon}>
