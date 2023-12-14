@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -19,7 +18,7 @@ export function InfoTooltip({
     <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className={cn("h-auto w-fit", className)}>
+          <div className={cn("h-auto w-fit hidden md:block", className)}>
             <Info size={18} className="text-primary/80" />
           </div>
         </TooltipTrigger>
