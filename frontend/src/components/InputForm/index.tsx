@@ -195,7 +195,7 @@ export function InputForm() {
                         }
                         render={({ field }) => (
                           <FormItem className="mb-2">
-                            <div className="gap-2">
+                            <div className="flex items-center">
                               <FormLabel className="mr-2">
                                 {feature.name}
                               </FormLabel>

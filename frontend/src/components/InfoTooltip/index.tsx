@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -16,18 +15,12 @@ export function InfoTooltip({
   className?: string;
 }) {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            className={cn(
-              "p-1.5 h-auto w-auto bg-accent dark:bg-slate-800 rounded-full",
-              className
-            )}
-          >
-            <Info size={16} className="text-foreground" />
-          </Button>
+          <div className={cn("h-auto w-fit hidden md:block", className)}>
+            <Info size={18} className="text-primary/80" />
+          </div>
         </TooltipTrigger>
         <TooltipContent>
           <p>{content}</p>
