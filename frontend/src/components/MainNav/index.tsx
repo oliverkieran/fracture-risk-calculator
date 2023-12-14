@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Menu } from "lucide-react";
+import { ModeToggle } from "@/components/Theme/mode-toggle";
 
 export default function MainNav({
   className,
@@ -16,7 +17,7 @@ export default function MainNav({
   return (
     <nav
       className={cn(
-        `bg-white w-full ${
+        `bg-white dark:bg-background w-full ${
           state
             ? "bg-primary/20 rounded-b-3xl border-b-indigo-200 pb-4"
             : "bg-white"
@@ -28,7 +29,9 @@ export default function MainNav({
       <div className="items-center px-4 max-w-screen-xl mx-auto md:flex md:px-8">
         <div className="flex items-center justify-between py-3 md:py-5 md:block">
           <a href="#">
-            <h1 className="text-2xl font-bold mr-auto">Bono AI</h1>
+            <h1 className="text-2xl font-bold mr-auto text-foreground">
+              Bono AI
+            </h1>
           </a>
           <div className="md:hidden">
             <button
@@ -55,6 +58,7 @@ export default function MainNav({
             ))}
           </ul>
         </div>
+        <ModeToggle />
       </div>
     </nav>
   );

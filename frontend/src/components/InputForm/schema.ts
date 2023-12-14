@@ -13,7 +13,7 @@ export const features: Feature[] = [
   {
     id: 1,
     name: "Hip Fracture Parents",
-    description: "Hip fracture in parents",
+    description: "",
     category: "anamnesis",
     key: "hip_fracture_parents",
     type: "boolean",
@@ -21,7 +21,7 @@ export const features: Feature[] = [
   {
     id: 2,
     name: "Osteoporotic Fracture Parents",
-    description: "Osteoporotic fracture in parents",
+    description: "",
     category: "anamnesis",
     key: "osteoporotic_fracture_parents",
     type: "boolean",
@@ -29,7 +29,7 @@ export const features: Feature[] = [
   {
     id: 3,
     name: "Corticosteroids",
-    description: "",
+    description: "≥5 mg/day for ≥3 months",
     category: "anamnesis",
     key: "corticosteroids",
     type: "boolean",
@@ -37,7 +37,7 @@ export const features: Feature[] = [
   {
     id: 4,
     name: "Steroid Daily Dosage",
-    description: "",
+    description: "mg/day",
     category: "anamnesis",
     key: "steroid_daily_dosage",
     type: "number",
@@ -77,7 +77,7 @@ export const features: Feature[] = [
   {
     id: 9,
     name: "Number of Falls",
-    description: "",
+    description: "Number of falls in the last 12 months.",
     category: "anamnesis",
     key: "number_of_falls",
     type: "number",
@@ -85,7 +85,7 @@ export const features: Feature[] = [
   {
     id: 10,
     name: "Immobility",
-    description: "",
+    description: "Need for walking aid",
     category: "anamnesis",
     key: "immobility",
     type: "boolean",
@@ -101,7 +101,7 @@ export const features: Feature[] = [
   {
     id: 12,
     name: "COPD",
-    description: "",
+    description: "Chronic obstructive pulmonary disease",
     category: "anamnesis",
     key: "copd",
     type: "boolean",
@@ -117,7 +117,7 @@ export const features: Feature[] = [
   {
     id: 14,
     name: "Early Menopause",
-    description: "",
+    description: "Menopause before 45 years old",
     category: "anamnesis",
     key: "early_menopause",
     type: "boolean",
@@ -125,7 +125,7 @@ export const features: Feature[] = [
   {
     id: 15,
     name: "Hyperpara",
-    description: "",
+    description: "Primary hyperparathyroidism",
     category: "anamnesis",
     key: "hyperpara",
     type: "boolean",
@@ -141,7 +141,7 @@ export const features: Feature[] = [
   {
     id: 17,
     name: "Alcohol",
-    description: "",
+    description: ">30g/day",
     category: "anamnesis",
     key: "alcohol",
     type: "boolean",
@@ -180,7 +180,7 @@ export const features: Feature[] = [
   },
   {
     id: 22,
-    name: "Previous Fracture",
+    name: "Previous Fractures",
     description: "",
     category: "anamnesis",
     key: "previous_fracture",
@@ -188,8 +188,8 @@ export const features: Feature[] = [
   },
   {
     id: 23,
-    name: "Recent Fracture",
-    description: "A fracture in the last 2 years.",
+    name: "Recent Fractures",
+    description: "Number of fractures in the last 2 years.",
     category: "anamnesis",
     key: "recent_fracture",
     type: "number",
