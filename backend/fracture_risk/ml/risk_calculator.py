@@ -92,13 +92,11 @@ class BonoAI:
         )
         xgb_pred = xgb_model.predict(xgb_data)
 
-        chf_funcs_test = cox_model.predict_cumulative_hazard_function(
-            xgb_pred.reshape(-1, 1)
-        )
-        risk_scores = np.row_stack([chf(self.times) for chf in chf_funcs_test])
-        y_pred = [chf(t) for chf in chf_funcs_test][0]
-        print(fx_type, y_pred)
-        return y_pred
+        survival_function = cox_model.predict_survival_function(xgb_pred.reshape(-1, 1))
+        fracture_proba = 1 - survival_function[0](t)
+
+        print(fx_type, fracture_proba)
+        return fracture_proba
 
 
 # FOR TESTING PURPOSES
