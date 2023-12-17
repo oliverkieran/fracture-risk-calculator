@@ -35,6 +35,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
+
 import { FormSchema, formDefaultValues, features } from "./schema";
 import { RiskScore } from "@/components/RiskScore";
 import { TreatmentInput } from "@/components/InputForm/TreatmentInput";
@@ -92,6 +94,11 @@ export function InputForm() {
     });
   }
 
+  function onSubmitErrors(errors: object) {
+    console.error(errors);
+    toast.error("Recent fractures cannot be greater than previous fractures.");
+  }
+
   return (
     <div className="border border-border rounded-xl w-full max-w-5xl p-4">
       <h1 className="text-3xl font-bold text-foreground py-4 lg:px-2">
@@ -99,7 +106,7 @@ export function InputForm() {
       </h1>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit, onSubmitErrors)}
           className="w-full space-y-6"
         >
           <div className="space-y-4 md:flex md:gap-4 md:space-y-0 p-2 bg-card -text--card-foreground">

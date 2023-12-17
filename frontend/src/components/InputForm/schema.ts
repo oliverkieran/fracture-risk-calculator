@@ -268,79 +268,85 @@ export const features: Feature[] = [
   },
 ];
 
-export const FormSchema = z.object({
-  sex: z.string().startsWith("female", {
-    message: "Bono is currently only available for female patients.",
-  }),
-  age: z.coerce
-    .number()
-    .min(0, { message: "Patient must be older than 40 years old." })
-    .max(120, { message: "Patient must be younger than 120 years old." }),
-  height: z.coerce
-    .number()
-    .min(50, { message: "Height must be greater than 50." })
-    .max(225, { message: "Height must be less than 225." }),
-  weight: z.coerce
-    .number()
-    .min(20, { message: "Height must be greater than 20." })
-    .max(400, { message: "Height must be less than 400." }),
-  hip_fracture_parents: z.boolean().default(false).optional(),
-  osteoporotic_fracture_parents: z.boolean().default(false).optional(),
-  corticosteroids: z.boolean().default(false).optional(),
-  steroid_daily_dosage: z.coerce
-    .number()
-    .min(0, { message: "Steroid daily dosage must be greater or equal to 0." })
-    .max(100, { message: "Steroid daily dosage must be less than 100." })
-    .default(0)
-    .optional(),
-  aromatase_inhibitors: z.boolean().default(false).optional(),
-  antiepileptics: z.boolean().default(false).optional(),
-  rheumatoid_arthritis: z.boolean().default(false).optional(),
-  ankylosing_spondylitis: z.boolean().default(false).optional(),
-  number_of_falls: z.coerce.number().min(0).max(100).default(0).optional(),
-  immobility: z.boolean().default(false).optional(),
-  type_1_diabetes: z.boolean().default(false).optional(),
-  copd: z.boolean().default(false).optional(),
-  gastrointestinal_disease: z.boolean().default(false).optional(),
-  early_menopause: z.boolean().default(false).optional(),
-  hyperpara: z.boolean().default(false).optional(),
-  falling_test_abnormal: z.boolean().default(false).optional(),
-  alcohol: z.boolean().default(false).optional(),
-  nicotin: z.boolean().default(false).optional(),
-  decrease_in_height: z.boolean().default(false).optional(),
-  low_back_pain: z.boolean().default(false).optional(),
-  hyperkyphosis: z.boolean().default(false).optional(),
-  previous_fracture: z.coerce.number().min(0).max(20).default(0).optional(),
-  recent_fracture: z.coerce.number().min(0).max(10).default(0).optional(),
-  tscore_neck: z.coerce
-    .number({ invalid_type_error: "Enter a T-score." })
-    .min(-10)
-    .max(10),
-  tscore_total_hip: z.coerce
-    .number({ invalid_type_error: "Enter a T-score." })
-    .min(-10)
-    .max(10),
-  tscore_ls: z.coerce
-    .number({ invalid_type_error: "Enter a T-score." })
-    .min(-10)
-    .max(10),
-  tbs: z.coerce.number({ invalid_type_error: "Enter a TBS." }).min(0).max(2),
-  bisphosphonate_prior: z.boolean().default(false).optional(),
-  bisphosphonate_current: z.boolean().default(false).optional(),
-  bisphosphonate_new: z.boolean().default(false).optional(),
-  denosumab_prior: z.boolean().default(false).optional(),
-  denosumab_current: z.boolean().default(false).optional(),
-  denosumab_new: z.boolean().default(false).optional(),
-  serm_prior: z.boolean().default(false).optional(),
-  serm_current: z.boolean().default(false).optional(),
-  serm_new: z.boolean().default(false).optional(),
-  teriparatide_prior: z.boolean().default(false).optional(),
-  teriparatide_current: z.boolean().default(false).optional(),
-  teriparatide_new: z.boolean().default(false).optional(),
-  hrt_prior: z.boolean().default(false).optional(),
-  hrt_current: z.boolean().default(false).optional(),
-  hrt_new: z.boolean().default(false).optional(),
-});
+export const FormSchema = z
+  .object({
+    sex: z.string().startsWith("female", {
+      message: "Bono is currently only available for female patients.",
+    }),
+    age: z.coerce
+      .number()
+      .min(0, { message: "Patient must be older than 40 years old." })
+      .max(120, { message: "Patient must be younger than 120 years old." }),
+    height: z.coerce
+      .number()
+      .min(50, { message: "Height must be greater than 50." })
+      .max(225, { message: "Height must be less than 225." }),
+    weight: z.coerce
+      .number()
+      .min(20, { message: "Height must be greater than 20." })
+      .max(400, { message: "Height must be less than 400." }),
+    hip_fracture_parents: z.boolean().default(false).optional(),
+    osteoporotic_fracture_parents: z.boolean().default(false).optional(),
+    corticosteroids: z.boolean().default(false).optional(),
+    steroid_daily_dosage: z.coerce
+      .number()
+      .min(0, {
+        message: "Steroid daily dosage must be greater or equal to 0.",
+      })
+      .max(100, { message: "Steroid daily dosage must be less than 100." })
+      .default(0)
+      .optional(),
+    aromatase_inhibitors: z.boolean().default(false).optional(),
+    antiepileptics: z.boolean().default(false).optional(),
+    rheumatoid_arthritis: z.boolean().default(false).optional(),
+    ankylosing_spondylitis: z.boolean().default(false).optional(),
+    number_of_falls: z.coerce.number().min(0).max(100).default(0).optional(),
+    immobility: z.boolean().default(false).optional(),
+    type_1_diabetes: z.boolean().default(false).optional(),
+    copd: z.boolean().default(false).optional(),
+    gastrointestinal_disease: z.boolean().default(false).optional(),
+    early_menopause: z.boolean().default(false).optional(),
+    hyperpara: z.boolean().default(false).optional(),
+    falling_test_abnormal: z.boolean().default(false).optional(),
+    alcohol: z.boolean().default(false).optional(),
+    nicotin: z.boolean().default(false).optional(),
+    decrease_in_height: z.boolean().default(false).optional(),
+    low_back_pain: z.boolean().default(false).optional(),
+    hyperkyphosis: z.boolean().default(false).optional(),
+    previous_fracture: z.coerce.number().min(0).max(20).default(0),
+    recent_fracture: z.coerce.number().min(0).max(10).default(0),
+    tscore_neck: z.coerce
+      .number({ invalid_type_error: "Enter a T-score." })
+      .min(-10)
+      .max(10),
+    tscore_total_hip: z.coerce
+      .number({ invalid_type_error: "Enter a T-score." })
+      .min(-10)
+      .max(10),
+    tscore_ls: z.coerce
+      .number({ invalid_type_error: "Enter a T-score." })
+      .min(-10)
+      .max(10),
+    tbs: z.coerce.number({ invalid_type_error: "Enter a TBS." }).min(0).max(2),
+    bisphosphonate_prior: z.boolean().default(false).optional(),
+    bisphosphonate_current: z.boolean().default(false).optional(),
+    bisphosphonate_new: z.boolean().default(false).optional(),
+    denosumab_prior: z.boolean().default(false).optional(),
+    denosumab_current: z.boolean().default(false).optional(),
+    denosumab_new: z.boolean().default(false).optional(),
+    serm_prior: z.boolean().default(false).optional(),
+    serm_current: z.boolean().default(false).optional(),
+    serm_new: z.boolean().default(false).optional(),
+    teriparatide_prior: z.boolean().default(false).optional(),
+    teriparatide_current: z.boolean().default(false).optional(),
+    teriparatide_new: z.boolean().default(false).optional(),
+    hrt_prior: z.boolean().default(false).optional(),
+    hrt_current: z.boolean().default(false).optional(),
+    hrt_new: z.boolean().default(false).optional(),
+  })
+  .refine((data) => data.previous_fracture >= data.recent_fracture, {
+    message: "Previous fractures must be greater than recent fractures.",
+  });
 
 export const formDefaultValues = {
   sex: "female",
