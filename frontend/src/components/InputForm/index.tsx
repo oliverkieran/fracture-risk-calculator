@@ -338,7 +338,11 @@ export function InputForm() {
                 </CardContent>
               </Card>
               {risks.any >= 0 && (
-                <RiskScore risks={risks} riskHorizon={riskHorizion} />
+                <RiskScore
+                  risks={risks}
+                  riskHorizon={riskHorizion}
+                  shapPath="/path/to/s3-bucket"
+                />
               )}
             </div>
           </div>
