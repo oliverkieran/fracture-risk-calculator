@@ -1,9 +1,16 @@
-import json
+import io
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pickle
 import os
+import shap
 import xgboost as xgb
+
+# Agg, is a non-interactive backend that can only write to files
+# for more info see: https://matplotlib.org/stable/users/explain/backends.html
+matplotlib.use("agg")
 
 
 class BonoAI:
@@ -27,14 +34,13 @@ class BonoAI:
 
         return models
 
-    def prepare_data(self, patient_data, features):
-        # drop not needed features
-        patient_data = patient_data.drop("sex")
+    def prepare_data(self, data, features):
+        patient_data = pd.Series(data, dtype="float64")
 
         # convert bool values to int
-        for key in patient_data.keys():
+        """ for key in patient_data.keys():
             if type(patient_data[key]) == bool:
-                patient_data[key] = int(patient_data[key])
+                patient_data[key] = int(patient_data[key]) """
 
         if patient_data[["hrt_prior", "hrt_current"]].sum() > 0:
             patient_data["hrt"] = 1
@@ -79,12 +85,11 @@ class BonoAI:
 
         return patient_data
 
-    def predict_risk(self, data, fx_type, t=24):
+    def predict_risk(self, data, fx_type, t=24, shap=False):
         xgb_model = self.models["xgb"][fx_type]
         cox_model = self.models["cox"][fx_type]
 
-        s = pd.Series(data)
-        prepared_data = self.prepare_data(s, xgb_model.feature_names)
+        prepared_data = self.prepare_data(data, xgb_model.feature_names)
 
         xgb_data = xgb.DMatrix(
             prepared_data.values.reshape(1, -1),
@@ -96,7 +101,23 @@ class BonoAI:
         fracture_proba = 1 - survival_function[0](t)
 
         print(fx_type, fracture_proba)
+
+        if shap:
+            self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
         return fracture_proba
+
+    def create_shap_waterfall(self, model, data, fx_type):
+        explainer = shap.Explainer(model)
+        patient_data = pd.DataFrame(data).T
+        shap_values = explainer(patient_data)
+        fig = shap.plots.waterfall(shap_values[0], show=False)
+
+        # Save plot to S3 bucket
+        img_data = io.BytesIO()
+        plt.savefig(img_data, format="png", bbox_inches="tight")
+        img_data.seek(0)
+
+        print(f"{fx_type}: SHAP waterfall plot saved.")
 
 
 # FOR TESTING PURPOSES
