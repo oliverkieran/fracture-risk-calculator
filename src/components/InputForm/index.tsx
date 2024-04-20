@@ -77,14 +77,10 @@ export function InputForm() {
       patientData: data,
     };
 
-    // send data to backend
-    const baseURL = import.meta.env.PROD
-      ? "https://fracture-risk.onrender.com"
-      : "http://localhost:8000";
+    // send data to api
     axios({
       method: "post",
-      //url: "https://fracture-risk.onrender.com/api/getRisk/",
-      url: baseURL + "/api/getRisk/",
+      url: "/api/getRisk",
       data: requestData,
     }).then((response) => {
       console.log("Received response from backend:", response.data);
