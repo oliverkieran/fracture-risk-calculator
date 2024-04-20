@@ -1,5 +1,9 @@
 # Bono AI
 
+> [!NOTE]
+> This branch is currently not active.
+> Reason: Deployment to Azure Static Web Apps currently doesn't work because of their 100MB app size limit (last checked: 20.04.2024). The .venv folder of the api is too large for the deployment. Azure reported to increase the limit in the future.
+
 ## Introduction
 
 This is the source code of Bono AI, a machine learning project that aims to compute 2-year fracture risk for postmenopausal women. It includes a website, that lets users compute fracture risks by inputing the required risk factors, and provides further insights into the risk score calculations by displaying SHAP plots. The website will soon be available at [bonoai.ch](https://bonoai.ch).
