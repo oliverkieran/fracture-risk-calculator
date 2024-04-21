@@ -16,18 +16,28 @@ import {
 } from "@/components/ui/dialog";
 import { Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
 
-export function SHAPDialog({
-  shapURL,
-  fxType = "any",
-}: {
-  shapURL: string;
-  fxType?: string;
-}) {
+export function SHAPDialog({ shapURL }: { shapURL: string }) {
+  const [location, setLocation] = useState("any");
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" variant="outline" size="icon">
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="bg-inherit border-stone-900"
+        >
           <Lightbulb size={18} className="text-foreground" />
         </Button>
       </DialogTrigger>
@@ -35,15 +45,38 @@ export function SHAPDialog({
         <DialogHeader>
           <DialogTitle className="text-black md:text-2xl">
             SHAP Waterfall Plot for{" "}
-            {fxType.charAt(0).toUpperCase() + fxType.slice(1)} Fracture
+            {location.charAt(0).toUpperCase() + location.slice(1)} Fracture
           </DialogTitle>
-          <DialogDescription className="text-lg">
-            This plot shows the contribution of each feature to the final risk
-            score.
+          <DialogDescription className="text-lg flex justify-between">
+            <p>
+              This plot shows the contribution of each feature to the final risk
+              score.
+            </p>
+            <div>
+              <Select value={location} onValueChange={setLocation}>
+                <SelectTrigger className="w-[180px] bg-white dark:bg-white text-black dark:text-black">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white dark:bg-white text-black dark:text-black">
+                  <SelectGroup>
+                    <SelectLabel>Location</SelectLabel>
+                    <SelectItem value="vertebral">Vertebral</SelectItem>
+                    <SelectItem value="hip">Hip</SelectItem>
+                    <SelectItem value="any">Any</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </DialogDescription>
         </DialogHeader>
+
         <div className="py-4">
           <img src={shapURL} alt="SHAP Waterfall Plot" className="w-full"></img>
+          {/* <img
+            src={`https://stbonoai.blob.core.windows.net/shap/2024-04-21/16-09-32/${location}-shap-71926.png`}
+            alt={shapURL}
+            className="w-full"
+          ></img> */}
         </div>
       </DialogContent>
     </Dialog>
@@ -69,16 +102,36 @@ type RiskProps = {
 export function RiskScore({ risks, riskHorizon = "2", shapURLs }: RiskProps) {
   const fx_types: (keyof RiskScoreProps)[] = ["vertebral", "hip", "any"];
 
-  const getColorClass = (risk: number) => {
-    if (risk < 3) return "bg-green-400/75";
-    if (risk > 10) return "bg-red-400/75";
+  const getColorClass = (
+    risk: number,
+    fx_type: "vertebral" | "hip" | "any"
+  ) => {
+    const thresholds = {
+      vertebral: {
+        low: 4,
+        high: 10,
+      },
+      hip: {
+        low: 2,
+        high: 8,
+      },
+      any: {
+        low: 8,
+        high: 15,
+      },
+    };
+    if (risk < thresholds[fx_type]["low"]) return "bg-green-400/75";
+    if (risk > thresholds[fx_type]["high"]) return "bg-red-400/75";
     return "bg-amber-400/75";
   };
 
   return (
     <Card className="bg-accent">
       <CardHeader>
-        <CardTitle>Risk Score</CardTitle>
+        <CardTitle className="flex items-center gap-4 justify-between">
+          Risk Score
+          <SHAPDialog shapURL={shapURLs["any"]} />
+        </CardTitle>
         <CardDescription className="text-base">
           {`${riskHorizon}-year fracture risk score at different sites.`}
         </CardDescription>
@@ -90,7 +143,7 @@ export function RiskScore({ risks, riskHorizon = "2", shapURLs }: RiskProps) {
               <div
                 className={cn(
                   "p-2 bg-green-400/75 rounded-md",
-                  getColorClass(risks[fx_type])
+                  getColorClass(risks[fx_type], fx_type)
                 )}
               >
                 <p className="font-semibold">
@@ -98,7 +151,6 @@ export function RiskScore({ risks, riskHorizon = "2", shapURLs }: RiskProps) {
                 </p>
                 <p> {risks[fx_type]}%</p>
               </div>
-              <SHAPDialog shapURL={shapURLs[fx_type]} fxType={fx_type} />
             </div>
           ))}
         </div>
