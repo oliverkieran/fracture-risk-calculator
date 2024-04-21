@@ -16,20 +16,29 @@ def getRisk(request):
         data["bmi"] = round(data["weight"] / ((data["height"] / 100) ** 2), 2)
 
         bono_ai = BonoAI()
-        vertebral_risk = bono_ai.predict_risk(
+        vertebral_risk_prediction = bono_ai.predict_risk(
             data, "vertebral", t=risk_horizon, shap=True
         )
-        hip_risk = bono_ai.predict_risk(data, "hip", t=risk_horizon, shap=False)
-        any_risk = bono_ai.predict_risk(data, "any", t=risk_horizon)
+        hip_risk_prediction = bono_ai.predict_risk(
+            data, "hip", t=risk_horizon, shap=True
+        )
+        any_risk_prediction = bono_ai.predict_risk(
+            data, "any", t=risk_horizon, shap=True
+        )
 
         # serializer.save()
         return Response(
             {
                 "message": "Risk score successfully calculated.",
                 "risks": {
-                    "vertebral": round(vertebral_risk * 100, 2),
-                    "hip": round(hip_risk * 100, 2),
-                    "any": round(any_risk * 100, 2),
+                    "vertebral": round(vertebral_risk_prediction["risk"] * 100, 2),
+                    "hip": round(hip_risk_prediction["risk"] * 100, 2),
+                    "any": round(any_risk_prediction["risk"] * 100, 2),
+                },
+                "shap_plots": {
+                    "vertebral": vertebral_risk_prediction["shap_plot"],
+                    "hip": hip_risk_prediction["shap_plot"],
+                    "any": any_risk_prediction["shap_plot"],
                 },
             }
         )

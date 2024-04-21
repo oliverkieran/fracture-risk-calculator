@@ -1,3 +1,4 @@
+import datetime
 import io
 import matplotlib
 import matplotlib.pyplot as plt
@@ -8,6 +9,8 @@ import os
 import shap
 import xgboost as xgb
 
+from azure.storage.blob import BlobServiceClient
+
 # Agg, is a non-interactive backend that can only write to files
 # for more info see: https://matplotlib.org/stable/users/explain/backends.html
 matplotlib.use("agg")
@@ -17,6 +20,12 @@ class BonoAI:
     def __init__(self):
         self.models = self.load_models()
         self.times = np.arange(12, 95, 12)
+        now = datetime.datetime.now()
+        self.blob_name = f"{now.date()}/{now.time().strftime('%H-%M-%S')}"
+        self.id = np.random.randint(100000)
+
+    def _create_blob_name(self, fx_type):
+        return f"{self.blob_name}/{fx_type}-shap-{self.id}.png"
 
     def load_models(self):
         models = {"xgb": {}, "cox": {}}
@@ -103,21 +112,38 @@ class BonoAI:
         print(fx_type, fracture_proba)
 
         if shap:
-            self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
-        return fracture_proba
+            blob_url = self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
+        return {
+            "risk": fracture_proba,
+            "shap_plot": blob_url if shap else None,
+        }
 
     def create_shap_waterfall(self, model, data, fx_type):
         explainer = shap.Explainer(model)
         patient_data = pd.DataFrame(data).T
         shap_values = explainer(patient_data)
+
+        plt.clf()  # reset the matplotlib figure
         fig = shap.plots.waterfall(shap_values[0], show=False)
 
-        # Save plot to S3 bucket
         img_data = io.BytesIO()
         plt.savefig(img_data, format="png", bbox_inches="tight")
         img_data.seek(0)
 
-        print(f"{fx_type}: SHAP waterfall plot saved.")
+        # Save plot to Azure blob storage
+        account_url = os.getenv("AZURE_STORAGE_ACCOUNT_URL")
+        service_client = BlobServiceClient(
+            account_url=account_url,
+            credential=os.getenv("AZURE_STORAGE_ACCESS_TOKEN"),
+        )
+        blob_name = self._create_blob_name(fx_type)
+        blob_client = service_client.get_blob_client(container="shap", blob=blob_name)
+        blob_client.upload_blob(img_data, blob_type="BlockBlob")
+
+        blob_url = f"{account_url}/shap/{blob_name}"
+
+        print(f"{fx_type}: SHAP waterfall plot saved to blob {blob_name}.")
+        return blob_url
 
 
 # FOR TESTING PURPOSES

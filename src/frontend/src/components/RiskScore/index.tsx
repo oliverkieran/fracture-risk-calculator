@@ -17,7 +17,13 @@ import {
 import { Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function SHAPDialog({ fxType = "any" }: { fxType?: string }) {
+export function SHAPDialog({
+  shapURL,
+  fxType = "any",
+}: {
+  shapURL: string;
+  fxType?: string;
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -37,11 +43,7 @@ export function SHAPDialog({ fxType = "any" }: { fxType?: string }) {
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
-          <img
-            src="https://fracture-risk.s3.eu-central-1.amazonaws.com/shap-plots/2024/01/03/shapPlot.png"
-            alt="SHAP Waterfall Plot"
-            className="w-full"
-          ></img>
+          <img src={shapURL} alt="SHAP Waterfall Plot" className="w-full"></img>
         </div>
       </DialogContent>
     </Dialog>
@@ -54,15 +56,17 @@ type RiskScoreProps = {
   any: number;
 };
 
-export function RiskScore({
-  risks,
-  riskHorizon = "2",
-  shapPath,
-}: {
+type RiskProps = {
   risks: RiskScoreProps;
   riskHorizon: string;
-  shapPath: string;
-}) {
+  shapURLs: {
+    vertebral: string;
+    hip: string;
+    any: string;
+  };
+};
+
+export function RiskScore({ risks, riskHorizon = "2", shapURLs }: RiskProps) {
   const fx_types: (keyof RiskScoreProps)[] = ["vertebral", "hip", "any"];
 
   const getColorClass = (risk: number) => {
@@ -70,8 +74,6 @@ export function RiskScore({
     if (risk > 10) return "bg-red-400/75";
     return "bg-amber-400/75";
   };
-
-  console.log(shapPath);
 
   return (
     <Card className="bg-accent">
@@ -96,7 +98,7 @@ export function RiskScore({
                 </p>
                 <p> {risks[fx_type]}%</p>
               </div>
-              <SHAPDialog fxType={fx_type} />
+              <SHAPDialog shapURL={shapURLs[fx_type]} fxType={fx_type} />
             </div>
           ))}
         </div>

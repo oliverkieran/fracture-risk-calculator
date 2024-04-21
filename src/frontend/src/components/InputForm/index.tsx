@@ -68,6 +68,11 @@ export function InputForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [risks, setRisks] = useState({ vertebral: -1, hip: -1, any: -1 });
+  const [shapURLs, setShapURLs] = useState({
+    vertebral: "",
+    hip: "",
+    any: "",
+  });
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Sending data to backend:", data);
     setIsSubmitting(true);
@@ -90,6 +95,7 @@ export function InputForm() {
       console.log("Received response from backend:", response.data);
       const computedRisks = response.data.risks;
       setRisks(computedRisks);
+      setShapURLs(response.data["shap_plots"]);
       setIsSubmitting(false);
     });
   }
@@ -341,7 +347,7 @@ export function InputForm() {
                 <RiskScore
                   risks={risks}
                   riskHorizon={riskHorizion}
-                  shapPath="/path/to/s3-bucket"
+                  shapURLs={shapURLs}
                 />
               )}
             </div>
