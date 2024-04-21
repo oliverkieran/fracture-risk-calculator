@@ -10,6 +10,7 @@ import shap
 import xgboost as xgb
 
 from azure.storage.blob import BlobServiceClient
+from .plots.waterfall import waterfall
 
 # Agg, is a non-interactive backend that can only write to files
 # for more info see: https://matplotlib.org/stable/users/explain/backends.html
@@ -124,7 +125,7 @@ class BonoAI:
         shap_values = explainer(patient_data)
 
         plt.clf()  # reset the matplotlib figure
-        fig = shap.plots.waterfall(shap_values[0], show=False)
+        fig = waterfall(shap_values[0], show=False)
 
         img_data = io.BytesIO()
         plt.savefig(img_data, format="png", bbox_inches="tight")
