@@ -27,7 +27,15 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 
-export function SHAPDialog({ shapURL }: { shapURL: string }) {
+export function SHAPDialog({
+  shapURLs,
+}: {
+  shapURLs: {
+    vertebral: string;
+    hip: string;
+    any: string;
+  };
+}) {
   const [location, setLocation] = useState("any");
   return (
     <Dialog>
@@ -71,7 +79,11 @@ export function SHAPDialog({ shapURL }: { shapURL: string }) {
         </DialogHeader>
 
         <div className="py-4">
-          <img src={shapURL} alt="SHAP Waterfall Plot" className="w-full"></img>
+          <img
+            src={shapURLs[location as keyof typeof shapURLs]}
+            alt="SHAP Waterfall Plot"
+            className="w-full"
+          ></img>
           {/* <img
             src={`https://stbonoai.blob.core.windows.net/shap/2024-04-21/16-09-32/${location}-shap-71926.png`}
             alt={shapURL}
@@ -130,7 +142,7 @@ export function RiskScore({ risks, riskHorizon = "2", shapURLs }: RiskProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-4 justify-between">
           Risk Score
-          <SHAPDialog shapURL={shapURLs["any"]} />
+          <SHAPDialog shapURLs={shapURLs} />
         </CardTitle>
         <CardDescription className="text-base">
           {`${riskHorizon}-year fracture risk score at different sites.`}
