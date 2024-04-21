@@ -51,11 +51,11 @@ export function SHAPDialog({
       </DialogTrigger>
       <DialogContent className="w-3/4 max-w-[425px] md:max-w-[1028px] bg-white dark:bg-white">
         <DialogHeader>
-          <DialogTitle className="text-black md:text-2xl">
+          <DialogTitle className="text-black md:text-2xl text-left">
             SHAP Waterfall Plot for{" "}
             {location.charAt(0).toUpperCase() + location.slice(1)} Fracture
           </DialogTitle>
-          <DialogDescription className="text-lg flex justify-between">
+          <DialogDescription className="text-lg space-y-2 md:flex md:justify-between text-left">
             <p>
               This plot shows the contribution of each feature to the final risk
               score.
@@ -86,7 +86,7 @@ export function SHAPDialog({
           ></img>
           {/* <img
             src={`https://stbonoai.blob.core.windows.net/shap/2024-04-21/16-09-32/${location}-shap-71926.png`}
-            alt={shapURL}
+            alt={shapURLs["any"]}
             className="w-full"
           ></img> */}
         </div>
