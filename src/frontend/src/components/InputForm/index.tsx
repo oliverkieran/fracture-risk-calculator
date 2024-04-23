@@ -40,7 +40,8 @@ import toast from "react-hot-toast";
 import { FormSchema, formDefaultValues, features } from "./schema";
 import { RiskScore } from "@/components/RiskScore";
 import { TreatmentInput } from "@/components/InputForm/TreatmentInput";
-import { InfoTooltip } from "@/components/InfoTooltip";
+import { InfoTooltip } from "@/components/tooltips/InfoTooltip";
+import { WarningTooltip } from "../tooltips/WarningTooltip";
 
 export function InputForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -314,7 +315,14 @@ export function InputForm() {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Treatment History</CardTitle>
+                  <CardTitle className="flex space-x-2">
+                    <p>Treatment History</p>
+                    <WarningTooltip
+                      title="Important"
+                      content="Our model indicates that prior treatments with bisphosphonates or denosumab may increase fracture risk, a finding that contrasts with some clinical trials. Please consider this while inputting treatment history."
+                      size={24}
+                    />
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {treatmentFeatures.map((feature) => (
@@ -357,7 +365,7 @@ export function InputForm() {
           <div className="flex items-end justify-between px-2 pb-4 bg-card -text--card-foreground">
             <div className="space-y-2">
               <Label>Time horizon</Label>
-              <Select onValueChange={setRiskHorizon}>
+              <Select value={riskHorizion} onValueChange={setRiskHorizon}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a time horizon" />
                 </SelectTrigger>
