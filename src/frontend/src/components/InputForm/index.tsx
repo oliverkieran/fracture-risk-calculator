@@ -398,7 +398,7 @@ export function InputForm() {
           </form>
         </Form>
       </div>
-      <div className="flex justify-center my-6 text-gray-500 dark:text-gray-400">
+      <div className="flex flex-col md:flex-row items-center md:items-start text-center justify-center my-6 p-4 text-gray-500 dark:text-gray-400">
         <p className="font-bold mr-1">Important: </p>
         <p>
           BonoAI is a research project and is not recommended for deployment in
