@@ -107,122 +107,171 @@ export function InputForm() {
   }
 
   return (
-    <div className="border border-border rounded-xl w-full max-w-5xl p-4">
-      <h1 className="text-3xl font-bold text-foreground py-4 lg:px-2">
-        Fracture Risk Calculator
-      </h1>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit, onSubmitErrors)}
-          className="w-full space-y-6"
-        >
-          <div className="space-y-4 md:flex md:gap-4 md:space-y-0 p-2 bg-card -text--card-foreground">
-            <FormField
-              control={form.control}
-              name="sex"
-              render={({ field }) => (
-                <FormItem className="w-56">
-                  <FormLabel>Sex</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="female" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="female">female</SelectItem>
-                      <SelectItem value="male">male</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex md:flex-none gap-4">
+    <div>
+      <div className="border border-border rounded-xl w-full max-w-5xl p-4">
+        <h1 className="text-3xl font-bold text-foreground py-4 lg:px-2">
+          Fracture Risk Calculator
+        </h1>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit, onSubmitErrors)}
+            className="w-full space-y-6"
+          >
+            <div className="space-y-4 md:flex md:gap-4 md:space-y-0 p-2 bg-card -text--card-foreground">
               <FormField
                 control={form.control}
-                name="age"
+                name="sex"
                 render={({ field }) => (
-                  <FormItem className="w-20">
-                    <FormLabel>Age</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
+                  <FormItem className="w-56">
+                    <FormLabel>Sex</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="female" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="female">female</SelectItem>
+                        <SelectItem value="male">male</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="height"
-                render={({ field }) => (
-                  <FormItem className="w-20">
-                    <FormLabel>Height</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="weight"
-                render={({ field }) => (
-                  <FormItem className="w-20">
-                    <FormLabel>Weight</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex md:flex-none gap-4">
+                <FormField
+                  control={form.control}
+                  name="age"
+                  render={({ field }) => (
+                    <FormItem className="w-20">
+                      <FormLabel>Age</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="height"
+                  render={({ field }) => (
+                    <FormItem className="w-20">
+                      <FormLabel>Height</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="weight"
+                  render={({ field }) => (
+                    <FormItem className="w-20">
+                      <FormLabel>Weight</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex items-center space-x-2 rounded-md bg-primary/20 dark:bg-primary/80 px-3 border border-border h-14 w-32 md:h-auto ">
+                <Label>BMI:</Label>
+                <p className="text-sm">{bmi}</p>
+              </div>
             </div>
-            <div className="flex items-center space-x-2 rounded-md bg-primary/20 dark:bg-primary/80 px-3 border border-border h-14 w-32 md:h-auto ">
-              <Label>BMI:</Label>
-              <p className="text-sm">{bmi}</p>
-            </div>
-          </div>
-          <Separator className="my-4" />
-          <div className="md:flex space-x-2 lg:space-x-4 space-y-4 md:space-y-0">
-            <Card className="md:w-1/2">
-              <CardHeader>
-                <CardTitle>Anamnesis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="grid grid-cols-2">
-                    {anamnesisNumberFeatures.map((feature) => (
+            <Separator className="my-4" />
+            <div className="md:flex space-x-2 lg:space-x-4 space-y-4 md:space-y-0">
+              <Card className="md:w-1/2">
+                <CardHeader>
+                  <CardTitle>Anamnesis</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2">
+                      {anamnesisNumberFeatures.map((feature) => (
+                        <FormField
+                          control={form.control}
+                          key={feature.id}
+                          name={
+                            feature.key as
+                              | "steroid_daily_dosage"
+                              | "number_of_falls"
+                              | "previous_fracture"
+                              | "recent_fracture"
+                          }
+                          render={({ field }) => (
+                            <FormItem className="mb-2">
+                              <div className="flex items-center">
+                                <FormLabel className="mr-2">
+                                  {feature.name}
+                                </FormLabel>
+                                {feature.description !== "" && (
+                                  <InfoTooltip content={feature.description} />
+                                )}
+                              </div>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  className="w-20"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                    {anamnesisBooleanFeatures.map((feature) => (
                       <FormField
                         control={form.control}
                         key={feature.id}
                         name={
                           feature.key as
-                            | "steroid_daily_dosage"
-                            | "number_of_falls"
-                            | "previous_fracture"
-                            | "recent_fracture"
+                            | "hip_fracture_parents"
+                            | "osteoporotic_fracture_parents"
+                            | "corticosteroids"
+                            | "aromatase_inhibitors"
+                            | "antiepileptics"
+                            | "rheumatoid_arthritis"
+                            | "ankylosing_spondylitis"
+                            | "immobility"
+                            | "type_1_diabetes"
+                            | "copd"
+                            | "gastrointestinal_disease"
+                            | "early_menopause"
+                            | "hyperpara"
+                            | "falling_test_abnormal"
+                            | "alcohol"
+                            | "nicotin"
+                            | "decrease_in_height"
+                            | "low_back_pain"
+                            | "hyperkyphosis"
                         }
                         render={({ field }) => (
-                          <FormItem className="mb-2">
-                            <div className="flex items-center">
-                              <FormLabel className="mr-2">
-                                {feature.name}
-                              </FormLabel>
-                              {feature.description !== "" && (
-                                <InfoTooltip content={feature.description} />
-                              )}
-                            </div>
+                          <FormItem className="w-32">
                             <FormControl>
-                              <Input
-                                type="number"
-                                className="w-20"
-                                {...field}
-                              />
+                              <div className="flex items-center space-x-2 py-1">
+                                <Switch
+                                  checked={field.value as boolean}
+                                  onCheckedChange={field.onChange}
+                                />
+                                <Label className="text-base whitespace-nowrap">
+                                  {feature.name}
+                                </Label>
+                                {feature.description !== "" && (
+                                  <InfoTooltip content={feature.description} />
+                                )}
+                              </div>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -230,172 +279,132 @@ export function InputForm() {
                       />
                     ))}
                   </div>
-                  {anamnesisBooleanFeatures.map((feature) => (
-                    <FormField
-                      control={form.control}
-                      key={feature.id}
-                      name={
-                        feature.key as
-                          | "hip_fracture_parents"
-                          | "osteoporotic_fracture_parents"
-                          | "corticosteroids"
-                          | "aromatase_inhibitors"
-                          | "antiepileptics"
-                          | "rheumatoid_arthritis"
-                          | "ankylosing_spondylitis"
-                          | "immobility"
-                          | "type_1_diabetes"
-                          | "copd"
-                          | "gastrointestinal_disease"
-                          | "early_menopause"
-                          | "hyperpara"
-                          | "falling_test_abnormal"
-                          | "alcohol"
-                          | "nicotin"
-                          | "decrease_in_height"
-                          | "low_back_pain"
-                          | "hyperkyphosis"
-                      }
-                      render={({ field }) => (
-                        <FormItem className="w-32">
-                          <FormControl>
-                            <div className="flex items-center space-x-2 py-1">
-                              <Switch
-                                checked={field.value as boolean}
-                                onCheckedChange={field.onChange}
-                              />
-                              <Label className="text-base whitespace-nowrap">
-                                {feature.name}
-                              </Label>
-                              {feature.description !== "" && (
-                                <InfoTooltip content={feature.description} />
-                              )}
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-            <div className="md:w-1/2 space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Bone Density Measurements</CardTitle>
-                  <CardDescription className="text-base">
-                    All values should be entered as T-scores.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2">
-                  {tscoreFeatures.map((feature) => (
-                    <FormField
-                      control={form.control}
-                      key={feature.id}
-                      name={
-                        feature.key as
-                          | "tscore_neck"
-                          | "tscore_total_hip"
-                          | "tscore_ls"
-                          | "tbs"
-                      }
-                      render={({ field }) => (
-                        <FormItem className="w-32 mb-2">
-                          <FormLabel>{feature.name}</FormLabel>
-                          <FormControl>
-                            <Input type="number" step="0.1" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ))}
                 </CardContent>
               </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex space-x-2">
-                    <p>Treatment History</p>
-                    <WarningTooltip
-                      title="Important"
-                      content="Our model indicates that prior treatments with bisphosphonates or denosumab may increase fracture risk, a finding that contrasts with some clinical trials. Please consider this while inputting treatment history."
-                      size={24}
-                    />
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {treatmentFeatures.map((feature) => (
-                    <div key={feature.id} className="mb-2">
-                      <h2 className="text-base font-medium mb-0.5">
-                        {feature.name}
-                      </h2>
-                      <div className="flex">
-                        <TreatmentInput
-                          form={form}
-                          feature={feature}
-                          treatment="Prior"
-                        />
-                        <TreatmentInput
-                          form={form}
-                          feature={feature}
-                          treatment="Current"
-                        />
-                        <TreatmentInput
-                          form={form}
-                          feature={feature}
-                          treatment="New"
-                        />
+              <div className="md:w-1/2 space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Bone Density Measurements</CardTitle>
+                    <CardDescription className="text-base">
+                      All values should be entered as T-scores.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-2">
+                    {tscoreFeatures.map((feature) => (
+                      <FormField
+                        control={form.control}
+                        key={feature.id}
+                        name={
+                          feature.key as
+                            | "tscore_neck"
+                            | "tscore_total_hip"
+                            | "tscore_ls"
+                            | "tbs"
+                        }
+                        render={({ field }) => (
+                          <FormItem className="w-32 mb-2">
+                            <FormLabel>{feature.name}</FormLabel>
+                            <FormControl>
+                              <Input type="number" step="0.1" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex space-x-2">
+                      <p>Treatment History</p>
+                      <WarningTooltip
+                        title="Important"
+                        content="Our model indicates that prior treatments with bisphosphonates or denosumab may increase fracture risk, a finding that contrasts with some clinical trials. Please consider this while inputting treatment history."
+                        size={24}
+                      />
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {treatmentFeatures.map((feature) => (
+                      <div key={feature.id} className="mb-2">
+                        <h2 className="text-base font-medium mb-0.5">
+                          {feature.name}
+                        </h2>
+                        <div className="flex">
+                          <TreatmentInput
+                            form={form}
+                            feature={feature}
+                            treatment="Prior"
+                          />
+                          <TreatmentInput
+                            form={form}
+                            feature={feature}
+                            treatment="Current"
+                          />
+                          <TreatmentInput
+                            form={form}
+                            feature={feature}
+                            treatment="New"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-              {risks.any >= 0 && (
-                <RiskScore
-                  risks={risks}
-                  riskHorizon={riskHorizion}
-                  shapURLs={shapURLs}
-                />
-              )}
-            </div>
-          </div>
-
-          <Separator className="my-4" />
-          <div className="flex items-end justify-between px-2 pb-4 bg-card -text--card-foreground">
-            <div className="space-y-2">
-              <Label>Time horizon</Label>
-              <Select value={riskHorizion} onValueChange={setRiskHorizon}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a time horizon" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1 year</SelectItem>
-                  <SelectItem value="2">2 years</SelectItem>
-                  <SelectItem value="3">3 years</SelectItem>
-                  <SelectItem value="4">4 years</SelectItem>
-                  <SelectItem value="5">5 years</SelectItem>
-                  <SelectItem value="6">6 years</SelectItem>
-                  <SelectItem value="7">7 years</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <Button
-              type="submit"
-              className="bg-primary hover:bg-blue-700"
-              disabled={isSubmitting}
-            >
-              <Loader2
-                className={cn(
-                  "mr-2 h-4 w-4 animate-spin",
-                  isSubmitting ? "block" : "hidden"
+                    ))}
+                  </CardContent>
+                </Card>
+                {risks.any >= 0 && (
+                  <RiskScore
+                    risks={risks}
+                    riskHorizon={riskHorizion}
+                    shapURLs={shapURLs}
+                  />
                 )}
-              />
-              Compute Risk
-            </Button>
-          </div>
-        </form>
-      </Form>
+              </div>
+            </div>
+
+            <Separator className="my-4" />
+            <div className="flex items-end justify-between px-2 pb-4 bg-card -text--card-foreground">
+              <div className="space-y-2">
+                <Label>Time horizon</Label>
+                <Select value={riskHorizion} onValueChange={setRiskHorizon}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a time horizon" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1 year</SelectItem>
+                    <SelectItem value="2">2 years</SelectItem>
+                    <SelectItem value="3">3 years</SelectItem>
+                    <SelectItem value="4">4 years</SelectItem>
+                    <SelectItem value="5">5 years</SelectItem>
+                    <SelectItem value="6">6 years</SelectItem>
+                    <SelectItem value="7">7 years</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                type="submit"
+                className="bg-primary hover:bg-blue-700"
+                disabled={isSubmitting}
+              >
+                <Loader2
+                  className={cn(
+                    "mr-2 h-4 w-4 animate-spin",
+                    isSubmitting ? "block" : "hidden"
+                  )}
+                />
+                Compute Risk
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+      <div className="flex justify-center my-6 text-gray-500 dark:text-gray-400">
+        <p className="font-bold mr-1">Important: </p>
+        <p>
+          BonoAI is a research project and is not recommended for deployment in
+          everyday clinical settings at this time.
+        </p>
+      </div>
     </div>
   );
 }
