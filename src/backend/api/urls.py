@@ -4,4 +4,5 @@ from . import views
 app_name = "api"
 urlpatterns = [
     path("getRisk/", views.getRisk, name="getRisk"),
+    path("getShapPlots/", views.getShapPlots, name="getShapPlots"),
 ]

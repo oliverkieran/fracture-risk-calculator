@@ -25,18 +25,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FormSchemaType } from "@/types/types";
 import { useState } from "react";
+import axios from "axios";
 
 export function SHAPDialog({
-  shapURLs,
+  riskHorizon,
+  data,
 }: {
-  shapURLs: {
-    vertebral: string;
-    hip: string;
-    any: string;
-  };
+  riskHorizon: string;
+  data: FormSchemaType;
 }) {
   const [location, setLocation] = useState("any");
+  const [shapCreated, setShapCreated] = useState(false);
+  const [shapURLs, setShapURLs] = useState({
+    vertebral: "",
+    hip: "",
+    any: "",
+  });
+
+  const onInsightsClick = () => {
+    if (!shapCreated) {
+      const requestData = {
+        riskHorizon: riskHorizon,
+        patientData: data,
+      };
+
+      console.log("Creating SHAP plot");
+      const baseURL = import.meta.env.PROD
+        ? "https://fracture-risk.onrender.com"
+        : "http://localhost:8000";
+      axios({
+        method: "post",
+        //url: "https://fracture-risk.onrender.com/api/getRisk/",
+        url: baseURL + "/api/getShapPlots/",
+        data: requestData,
+      }).then((response) => {
+        console.log(
+          "Received response from backend:",
+          response.data.shap_plots
+        );
+        setShapURLs(response.data.shap_plots);
+      });
+      setShapCreated(true);
+    }
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -45,6 +78,7 @@ export function SHAPDialog({
           variant="outline"
           size="icon"
           className="bg-inherit border-stone-900"
+          onClick={onInsightsClick}
         >
           <Lightbulb size={18} className="text-foreground" />
         </Button>
@@ -104,14 +138,10 @@ type RiskScoreProps = {
 type RiskProps = {
   risks: RiskScoreProps;
   riskHorizon: string;
-  shapURLs: {
-    vertebral: string;
-    hip: string;
-    any: string;
-  };
+  //data: FormSchemaType;
 };
 
-export function RiskScore({ risks, riskHorizon = "2", shapURLs }: RiskProps) {
+export function RiskScore({ risks, riskHorizon = "2" }: RiskProps) {
   const fx_types: (keyof RiskScoreProps)[] = ["vertebral", "hip", "any"];
 
   const getColorClass = (
@@ -142,7 +172,7 @@ export function RiskScore({ risks, riskHorizon = "2", shapURLs }: RiskProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-4 justify-between">
           Risk Score
-          <SHAPDialog shapURLs={shapURLs} />
+          {/* <SHAPDialog riskHorizon={riskHorizon} data={data} /> */}
         </CardTitle>
         <CardDescription className="text-base">
           {`${riskHorizon}-year fracture risk score at different sites.`}

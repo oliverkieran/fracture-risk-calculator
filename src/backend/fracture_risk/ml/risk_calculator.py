@@ -95,10 +95,9 @@ class BonoAI:
 
         return patient_data
 
-    def predict_risk(self, data, fx_type, t=24, shap=False):
+    def predict_risk(self, data, fx_type, t=24):
         xgb_model = self.models["xgb"][fx_type]
         cox_model = self.models["cox"][fx_type]
-
         prepared_data = self.prepare_data(data, xgb_model.feature_names)
 
         xgb_data = xgb.DMatrix(
@@ -111,13 +110,8 @@ class BonoAI:
         fracture_proba = 1 - survival_function[0](t)
 
         print(fx_type, fracture_proba)
-
-        if shap:
-            blob_url = self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
-        return {
-            "risk": fracture_proba,
-            "shap_plot": blob_url if shap else None,
-        }
+        # blob_url = self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
+        return fracture_proba
 
     def create_shap_waterfall(self, model, data, fx_type):
         explainer = shap.Explainer(model)
