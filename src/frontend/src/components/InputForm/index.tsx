@@ -71,6 +71,11 @@ export function InputForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [risks, setRisks] = useState({ vertebral: -1, hip: -1, any: -1 });
+  const [shapPlots, setShapPlots] = useState({
+    vertebral: "",
+    hip: "",
+    any: "",
+  });
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Sending data to backend:", data);
     setIsSubmitting(true);
@@ -94,7 +99,10 @@ export function InputForm() {
     }).then((response) => {
       console.log("Received response from backend:", response.data);
       const computedRisks = response.data.risks;
+      const shapPlots = response.data.shap_plots;
+      console.log("Computed risks:", computedRisks);
       setRisks(computedRisks);
+      setShapPlots(shapPlots);
       setIsSubmitting(false);
     });
   }
@@ -353,8 +361,8 @@ export function InputForm() {
                 {risks.any >= 0 && (
                   <RiskScore
                     risks={risks}
+                    shapPlots={shapPlots}
                     riskHorizon={riskHorizion}
-                    //data={submittedData as FormSchemaType}
                   />
                 )}
               </div>

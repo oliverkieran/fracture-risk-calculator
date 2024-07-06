@@ -19,11 +19,9 @@ def getRisk(request):
         data["bmi"] = round(data["weight"] / ((data["height"] / 100) ** 2), 2)
 
         bono_ai = BonoAI()
-        vertebral_risk_prediction = bono_ai.predict_risk(
-            data, "vertebral", t=risk_horizon
-        )
-        hip_risk_prediction = bono_ai.predict_risk(data, "hip", t=risk_horizon)
-        any_risk_prediction = bono_ai.predict_risk(data, "any", t=risk_horizon)
+        vertebral_result = bono_ai.predict_risk(data, "vertebral", t=risk_horizon)
+        hip_result = bono_ai.predict_risk(data, "hip", t=risk_horizon)
+        any_result = bono_ai.predict_risk(data, "any", t=risk_horizon)
 
         # serializer.save()
         print(
@@ -33,54 +31,14 @@ def getRisk(request):
             {
                 "message": "Risk score successfully calculated.",
                 "risks": {
-                    "vertebral": round(vertebral_risk_prediction * 100, 2),
-                    "hip": round(hip_risk_prediction * 100, 2),
-                    "any": round(any_risk_prediction * 100, 2),
+                    "vertebral": round(vertebral_result["risk"] * 100, 2),
+                    "hip": round(hip_result["risk"] * 100, 2),
+                    "any": round(any_result["risk"] * 100, 2),
                 },
-            }
-        )
-    else:
-        print("Errors:", serializer.errors)
-        return Response(serializer.errors)
-
-
-@api_view(["POST"])
-def getShapPlots(request):
-    serializer = PatientSerializer(data=request.data["patientData"])
-    risk_horizon = int(request.data["riskHorizon"]) * 12
-
-    if serializer.is_valid():
-        data = serializer.validated_data
-        print("Data:", data)
-        data.pop("sex")  # remove not needed feature
-        data["bmi"] = round(data["weight"] / ((data["height"] / 100) ** 2), 2)
-
-        bono_ai = BonoAI()
-        prepared_data = bono_ai.prepare_data(
-            data, bono_ai.models["xgb"]["any"].feature_names
-        )
-        vertebral_shap_url = bono_ai.create_shap_waterfall(
-            bono_ai.models["xgb"]["vertebral"], prepared_data, "vertebral"
-        )
-        hip_shap_url = bono_ai.create_shap_waterfall(
-            bono_ai.models["xgb"]["hip"], prepared_data, "hip"
-        )
-        any_shap_url = bono_ai.create_shap_waterfall(
-            bono_ai.models["xgb"]["any"], prepared_data, "any"
-        )
-
-        print("vertebral:", vertebral_shap_url)
-        print("hip:", hip_shap_url)
-        print("any:", any_shap_url)
-
-        # serializer.save()
-        return Response(
-            {
-                "message": "SHAP plots successfully created.",
                 "shap_plots": {
-                    "vertebral": vertebral_shap_url,
-                    "hip": hip_shap_url,
-                    "any": any_shap_url,
+                    "vertebral": vertebral_result["shap_plot"],
+                    "hip": hip_result["shap_plot"],
+                    "any": any_result["shap_plot"],
                 },
             }
         )

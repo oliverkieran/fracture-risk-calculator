@@ -1,3 +1,4 @@
+import base64
 import datetime
 import io
 import matplotlib
@@ -110,8 +111,11 @@ class BonoAI:
         fracture_proba = 1 - survival_function[0](t)
 
         print(fx_type, fracture_proba)
-        # blob_url = self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
-        return fracture_proba
+        shap_plot = self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
+        return {
+            "risk": fracture_proba,
+            "shap_plot": shap_plot,
+        }
 
     def create_shap_waterfall(self, model, data, fx_type):
         explainer = shap.Explainer(model)
@@ -121,24 +125,16 @@ class BonoAI:
         plt.clf()  # reset the matplotlib figure
         fig = waterfall(shap_values[0], show=False)
 
+        # Save the plot to a bytes buffer
         img_data = io.BytesIO()
         plt.savefig(img_data, format="png", bbox_inches="tight")
         img_data.seek(0)
 
-        # Save plot to Azure blob storage
-        account_url = os.getenv("AZURE_STORAGE_ACCOUNT_URL")
-        service_client = BlobServiceClient(
-            account_url=account_url,
-            credential=os.getenv("AZURE_STORAGE_ACCESS_TOKEN"),
-        )
-        blob_name = self._create_blob_name(fx_type)
-        blob_client = service_client.get_blob_client(container="shap", blob=blob_name)
-        blob_client.upload_blob(img_data, blob_type="BlockBlob")
+        # Encode the bytes as base64
+        image_base64 = base64.b64encode(img_data.getvalue()).decode("utf-8")
 
-        blob_url = f"{account_url}/shap/{blob_name}"
-
-        print(f"{fx_type}: SHAP waterfall plot saved to blob {blob_name}.")
-        return blob_url
+        print(f"{fx_type}: SHAP waterfall plot created.")
+        return image_base64
 
 
 # FOR TESTING PURPOSES
