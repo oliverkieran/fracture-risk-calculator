@@ -81,8 +81,8 @@ export function InputForm() {
     setIsSubmitting(true);
 
     const requestData = {
-      riskHorizon: riskHorizion,
-      patientData: data,
+      risk_horizon: riskHorizion,
+      patient_data: data,
     };
 
     //setSubmittedData(data);
@@ -94,7 +94,7 @@ export function InputForm() {
     axios({
       method: "post",
       //url: "https://fracture-risk.onrender.com/api/getRisk/",
-      url: baseURL + "/api/getRisk/",
+      url: baseURL + "/getRisk/",
       data: requestData,
     }).then((response) => {
       console.log("Received response from backend:", response.data);
