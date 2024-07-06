@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@/components/Theme/theme-provider";
-import { InputForm } from "@/components/InputForm";
+import { Outlet } from "react-router-dom";
 import MainNav from "@/components/MainNav";
 import { Toaster } from "react-hot-toast";
 
@@ -8,8 +8,8 @@ export default function App() {
     <ThemeProvider defaultTheme="light">
       <div className="flex flex-col bg-background">
         <MainNav className="mb-4" />
-        <div className="flex flex-col items-center px-2 md:px-0">
-          <InputForm />
+        <div id="content" className="flex flex-col items-center px-2 md:px-0">
+          <Outlet />
         </div>
         <Toaster />
       </div>

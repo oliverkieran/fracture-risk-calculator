@@ -11,8 +11,8 @@ export default function MainNav({
 
   const menus = [
     { title: "Home", path: "/" },
-    { title: "How does it work?", path: "/" },
-    { title: "Settings", path: "/" },
+    // { title: "How does it work?", path: "/" },
+    { title: "Contact", path: "/contact" },
   ];
   return (
     <nav
@@ -28,7 +28,7 @@ export default function MainNav({
     >
       <div className="items-center px-4 max-w-screen-xl mx-auto md:flex md:px-8">
         <div className="flex items-center justify-between py-3 md:py-5 md:block">
-          <a href="#">
+          <a href="/">
             <h1 className="text-2xl font-bold mr-auto text-foreground">
               Bono AI
             </h1>
