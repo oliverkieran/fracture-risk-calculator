@@ -12,7 +12,7 @@ export default function MainNav({
   const menus = [
     { title: "Home", path: "/" },
     // { title: "How does it work?", path: "/" },
-    { title: "Contact", path: "/contact" },
+    // { title: "Contact", path: "/contact" },
   ];
   return (
     <nav

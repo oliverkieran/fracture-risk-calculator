@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import { InputForm } from "@/components/InputForm";
-import Contact from "@/components/Contact";
+//import Contact from "@/components/Contact";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -15,10 +15,10 @@ const router = createBrowserRouter([
         path: "",
         element: <InputForm />,
       },
-      {
-        path: "contact",
-        element: <Contact />,
-      },
+      // {
+      //   path: "contact",
+      //   element: <Contact />,
+      // },
     ],
   },
 ]);
