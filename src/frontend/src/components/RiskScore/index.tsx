@@ -25,13 +25,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { FormSchemaType } from "@/types/types";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 type ShapPlotProps = {
-  vertebral: string;
-  hip: string;
-  any: string;
-  [key: string]: string;
+  riskHorizon: string;
+  data: FormSchemaType;
 };
 
 type RiskScoreProps = {
@@ -42,12 +42,37 @@ type RiskScoreProps = {
 
 type RiskProps = {
   risks: RiskScoreProps;
-  shapPlots: ShapPlotProps;
   riskHorizon: string;
+  data: FormSchemaType;
 };
 
-export function SHAPDialog({ shapPlots }: { shapPlots: ShapPlotProps }) {
+export function SHAPDialog({ riskHorizon, data }: ShapPlotProps) {
   const [location, setLocation] = useState("any");
+  const [shapData, setShapData] = useState("");
+
+  const onInsightsClick = () => {
+    const requestData = {
+      riskHorizon: riskHorizon,
+      patientData: data,
+      fxType: location,
+    };
+
+    console.log("Creating SHAP plot");
+    const baseURL = import.meta.env.PROD
+      ? "https://fracture-risk.onrender.com"
+      : "http://localhost:8000";
+    axios({
+      method: "post",
+      url: baseURL + "/api/getShapPlot/",
+      data: requestData,
+    }).then((response) => {
+      setShapData(response.data.shap_plot);
+    });
+  };
+  useEffect(() => {
+    onInsightsClick();
+  }, [location]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -56,6 +81,7 @@ export function SHAPDialog({ shapPlots }: { shapPlots: ShapPlotProps }) {
           variant="outline"
           size="icon"
           className="bg-inherit border-stone-900"
+          onClick={onInsightsClick}
         >
           <Lightbulb size={18} className="text-foreground" />
         </Button>
@@ -91,7 +117,7 @@ export function SHAPDialog({ shapPlots }: { shapPlots: ShapPlotProps }) {
 
         <div className="py-4">
           <img
-            src={`data:image/png;base64,${shapPlots[location]}`}
+            src={`data:image/png;base64,${shapData}`}
             alt="SHAP Waterfall Plot"
             className="w-full"
           ></img>
@@ -101,7 +127,7 @@ export function SHAPDialog({ shapPlots }: { shapPlots: ShapPlotProps }) {
   );
 }
 
-export function RiskScore({ risks, shapPlots, riskHorizon = "2" }: RiskProps) {
+export function RiskScore({ risks, riskHorizon = "2", data }: RiskProps) {
   const fx_types: (keyof RiskScoreProps)[] = ["vertebral", "hip", "any"];
 
   const getColorClass = (
@@ -132,7 +158,7 @@ export function RiskScore({ risks, shapPlots, riskHorizon = "2" }: RiskProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-4 justify-between">
           Risk Score
-          <SHAPDialog shapPlots={shapPlots} />
+          <SHAPDialog riskHorizon={riskHorizon} data={data} />
         </CardTitle>
         <CardDescription className="text-base">
           {`${riskHorizon}-year fracture risk score at different sites.`}

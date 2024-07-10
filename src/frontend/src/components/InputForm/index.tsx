@@ -42,14 +42,14 @@ import { RiskScore } from "@/components/RiskScore";
 import { TreatmentInput } from "@/components/InputForm/TreatmentInput";
 import { InfoTooltip } from "@/components/tooltips/InfoTooltip";
 import { WarningTooltip } from "../tooltips/WarningTooltip";
-//import { FormSchemaType } from "@/types/types";
+import { FormSchemaType } from "@/types/types";
 
 export function InputForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: formDefaultValues,
   });
-  //const [submittedData, setSubmittedData] = useState({});
+  const [submittedData, setSubmittedData] = useState({});
 
   const anamnesisBooleanFeatures = features.filter(
     (feature) => feature.category === "anamnesis" && feature.type === "boolean"
@@ -71,11 +71,6 @@ export function InputForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [risks, setRisks] = useState({ vertebral: -1, hip: -1, any: -1 });
-  const [shapPlots, setShapPlots] = useState({
-    vertebral: "",
-    hip: "",
-    any: "",
-  });
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Sending data to backend:", data);
     setIsSubmitting(true);
@@ -85,7 +80,7 @@ export function InputForm() {
       patientData: data,
     };
 
-    //setSubmittedData(data);
+    setSubmittedData(data);
 
     // send data to backend
     const baseURL = import.meta.env.PROD
@@ -99,10 +94,8 @@ export function InputForm() {
     }).then((response) => {
       console.log("Received response from backend:", response.data);
       const computedRisks = response.data.risks;
-      const shapPlots = response.data.shap_plots;
       console.log("Computed risks:", computedRisks);
       setRisks(computedRisks);
-      setShapPlots(shapPlots);
       setIsSubmitting(false);
     });
   }
@@ -361,8 +354,8 @@ export function InputForm() {
                 {risks.any >= 0 && (
                   <RiskScore
                     risks={risks}
-                    shapPlots={shapPlots}
                     riskHorizon={riskHorizion}
+                    data={submittedData as FormSchemaType}
                   />
                 )}
               </div>

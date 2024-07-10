@@ -10,7 +10,6 @@ import os
 import shap
 import xgboost as xgb
 
-from azure.storage.blob import BlobServiceClient
 from .plots.waterfall import waterfall
 
 # Agg, is a non-interactive backend that can only write to files
@@ -22,14 +21,10 @@ class BonoAI:
     def __init__(self):
         self.models = self.load_models()
         self.times = np.arange(12, 95, 12)
-        now = datetime.datetime.now()
-        self.blob_name = f"{now.date()}/{now.time().strftime('%H-%M-%S')}"
         self.id = np.random.randint(100000)
 
-    def _create_blob_name(self, fx_type):
-        return f"{self.blob_name}/{fx_type}-shap-{self.id}.png"
-
     def load_models(self):
+        now = datetime.datetime.now()
         models = {"xgb": {}, "cox": {}}
         base_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -43,9 +38,12 @@ class BonoAI:
             with open(cox_path, "rb") as file:
                 models["cox"][fx_type] = pickle.load(file)
 
+        print(
+            f"Models loaded in {round((datetime.datetime.now() - now).total_seconds(), 2)} seconds."
+        )
         return models
 
-    def prepare_data(self, data, features):
+    def prepare_data(self, data):
         patient_data = pd.Series(data, dtype="float64")
 
         # convert bool values to int
@@ -91,19 +89,21 @@ class BonoAI:
             patient_data.loc["Bisphosphonat_prior":"HRT_new"].sum() == 0
         )
         # sort features the same way as in the xgb model
-        xgb_features = features
+        xgb_features = self.models["xgb"]["vertebral"].feature_names
         patient_data = patient_data[xgb_features]
+
+        self.prepared_data = patient_data
 
         return patient_data
 
-    def predict_risk(self, data, fx_type, t=24):
+    def predict_risk(self, fx_type, t=24):
         xgb_model = self.models["xgb"][fx_type]
         cox_model = self.models["cox"][fx_type]
-        prepared_data = self.prepare_data(data, xgb_model.feature_names)
+        # prepared_data = self.prepare_data(data, xgb_model.feature_names)
 
         xgb_data = xgb.DMatrix(
-            prepared_data.values.reshape(1, -1),
-            feature_names=prepared_data.index.tolist(),
+            self.prepared_data.values.reshape(1, -1),
+            feature_names=self.prepared_data.index.tolist(),
         )
         xgb_pred = xgb_model.predict(xgb_data)
 
@@ -111,13 +111,16 @@ class BonoAI:
         fracture_proba = 1 - survival_function[0](t)
 
         print(fx_type, fracture_proba)
-        shap_plot = self.create_shap_waterfall(xgb_model, prepared_data, fx_type)
-        return {
-            "risk": fracture_proba,
-            "shap_plot": shap_plot,
-        }
+        # shap_plot = self.create_shap_waterfall(self.prepared_data, fx_type)
+        # return {
+        #     "risk": fracture_proba,
+        #     # "shap_plot": shap_plot,
+        # }
+        return fracture_proba
 
-    def create_shap_waterfall(self, model, data, fx_type):
+    def create_shap_waterfall(self, data, fx_type):
+        now = datetime.datetime.now()
+        model = self.models["xgb"][fx_type]
         explainer = shap.Explainer(model)
         patient_data = pd.DataFrame(data).T
         shap_values = explainer(patient_data)
@@ -133,7 +136,9 @@ class BonoAI:
         # Encode the bytes as base64
         image_base64 = base64.b64encode(img_data.getvalue()).decode("utf-8")
 
-        print(f"{fx_type}: SHAP waterfall plot created.")
+        print(
+            f"{fx_type}: SHAP waterfall plot created in {round((datetime.datetime.now() - now).total_seconds(), 2)} seconds."
+        )
         return image_base64
 
 
