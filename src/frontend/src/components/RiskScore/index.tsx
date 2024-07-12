@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { FormSchemaType } from "@/types/types";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -49,8 +50,10 @@ type RiskProps = {
 export function SHAPDialog({ riskHorizon, data }: ShapPlotProps) {
   const [location, setLocation] = useState("any");
   const [shapData, setShapData] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const onInsightsClick = () => {
+    setIsLoading(true);
     const requestData = {
       riskHorizon: riskHorizon,
       patientData: data,
@@ -65,9 +68,15 @@ export function SHAPDialog({ riskHorizon, data }: ShapPlotProps) {
       method: "post",
       url: baseURL + "/api/getShapPlot/",
       data: requestData,
-    }).then((response) => {
-      setShapData(response.data.shap_plot);
-    });
+    })
+      .then((response) => {
+        setShapData(response.data.shap_plot);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching SHAP plot", error);
+        setIsLoading(false);
+      });
   };
   useEffect(() => {
     onInsightsClick();
@@ -92,35 +101,39 @@ export function SHAPDialog({ riskHorizon, data }: ShapPlotProps) {
             SHAP Waterfall Plot for{" "}
             {location.charAt(0).toUpperCase() + location.slice(1)} Fracture
           </DialogTitle>
-          <DialogDescription className="text-lg space-y-2 md:flex md:justify-between text-left">
-            <p>
+          <div className="md:flex md:justify-between text-left">
+            <DialogDescription className="text-lg space-y-2">
               This plot shows the contribution of each feature to the final risk
               score.
-            </p>
-            <div>
-              <Select value={location} onValueChange={setLocation}>
-                <SelectTrigger className="w-[180px] bg-white dark:bg-white text-black dark:text-black">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-white text-black dark:text-black">
-                  <SelectGroup>
-                    <SelectLabel>Location</SelectLabel>
-                    <SelectItem value="vertebral">Vertebral</SelectItem>
-                    <SelectItem value="hip">Hip</SelectItem>
-                    <SelectItem value="any">Any</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </DialogDescription>
+            </DialogDescription>
+            <Select value={location} onValueChange={setLocation}>
+              <SelectTrigger className="w-[180px] bg-white dark:bg-white text-black dark:text-black">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-white dark:bg-white text-black dark:text-black">
+                <SelectGroup>
+                  <SelectLabel>Location</SelectLabel>
+                  <SelectItem value="vertebral">Vertebral</SelectItem>
+                  <SelectItem value="hip">Hip</SelectItem>
+                  <SelectItem value="any">Any</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         </DialogHeader>
 
         <div className="py-4">
-          <img
-            src={`data:image/png;base64,${shapData}`}
-            alt="SHAP Waterfall Plot"
-            className="w-full"
-          ></img>
+          {isLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-[400px] w-full" />
+            </div>
+          ) : (
+            <img
+              src={`data:image/png;base64,${shapData}`}
+              alt="SHAP Waterfall Plot"
+              className="w-full"
+            ></img>
+          )}
         </div>
       </DialogContent>
     </Dialog>
