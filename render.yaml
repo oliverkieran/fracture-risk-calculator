@@ -1,9 +1,3 @@
-databases:
-  - name: BonoAI-DB
-    databaseName: fracture_risk
-    user: fracture_risk
-    region: frankfurt
-
 services:
   - type: web
     name: BonoAI-backend
@@ -14,10 +8,6 @@ services:
     buildCommand: "./build.sh"
     startCommand: "gunicorn fracture_risk.wsgi:application"
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: fracture_risk
-          property: connectionString
       - key: DJANGO_SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
