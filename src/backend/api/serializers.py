@@ -1,8 +1,55 @@
 from rest_framework import serializers
-from .models import Patient
 
 
-class PatientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Patient
-        fields = "__all__"
+class PatientSerializer(serializers.Serializer):
+    """Serializer for validating patient risk factor data."""
+
+    sex = serializers.ChoiceField(choices=[("female", "female"), ("male", "male")])
+    age = serializers.IntegerField()
+    height = serializers.IntegerField()
+    weight = serializers.IntegerField()
+    bmi = serializers.FloatField(required=False, allow_null=True)
+    hip_fracture_parents = serializers.BooleanField()
+    osteoporotic_fracture_parents = serializers.BooleanField()
+    corticosteroids = serializers.BooleanField()
+    steroid_daily_dosage = serializers.IntegerField()
+    aromatase_inhibitors = serializers.BooleanField()
+    antiepileptics = serializers.BooleanField()
+    rheumatoid_arthritis = serializers.BooleanField()
+    ankylosing_spondylitis = serializers.BooleanField()
+    number_of_falls = serializers.IntegerField()
+    immobility = serializers.BooleanField()
+    type_1_diabetes = serializers.BooleanField()
+    copd = serializers.BooleanField()
+    gastrointestinal_disease = serializers.BooleanField()
+    early_menopause = serializers.BooleanField()
+    hyperpara = serializers.BooleanField()
+    falling_test_abnormal = serializers.BooleanField()
+    alcohol = serializers.BooleanField()
+    nicotin = serializers.BooleanField()
+    decrease_in_height = serializers.BooleanField()
+    low_back_pain = serializers.BooleanField()
+    hyperkyphosis = serializers.BooleanField()
+    previous_fracture = serializers.IntegerField()
+    recent_fracture = serializers.IntegerField()
+    tscore_neck = serializers.FloatField()
+    tscore_total_hip = serializers.FloatField()
+    tscore_ls = serializers.FloatField()
+    tbs = serializers.FloatField()
+    bisphosphonate_prior = serializers.BooleanField()
+    bisphosphonate_current = serializers.BooleanField()
+    bisphosphonate_new = serializers.BooleanField()
+    denosumab_prior = serializers.BooleanField()
+    denosumab_current = serializers.BooleanField()
+    denosumab_new = serializers.BooleanField()
+    serm_prior = serializers.BooleanField()
+    serm_current = serializers.BooleanField()
+    serm_new = serializers.BooleanField()
+    teriparatide_prior = serializers.BooleanField()
+    teriparatide_current = serializers.BooleanField()
+    teriparatide_new = serializers.BooleanField()
+    hrt_prior = serializers.BooleanField()
+    hrt_current = serializers.BooleanField()
+    hrt_new = serializers.BooleanField()
+    created = serializers.DateTimeField(required=False, allow_null=True)
+    updated = serializers.DateTimeField(required=False, allow_null=True)
