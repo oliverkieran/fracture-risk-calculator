@@ -1,0 +1,18 @@
+# Render deployment configuration for FastAPI backend
+services:
+  - type: web
+    name: BonoAI-FastAPI-backend
+    runtime: python
+    region: frankfurt
+    buildCommand: "./build.sh"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 4"
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: false
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ORIGINS
+        value: "https://bonoai-frontend.onrender.com,https://www.bonoai.ch,https://bonoai.ch"
+    healthCheckPath: /health
