@@ -21,6 +21,7 @@ class Settings(BaseSettings):
         "https://www.bonoai.ch",
         "https://bonoai.ch",
     ]
+    CORS_ORIGIN_REGEX: str | None = None
 
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
