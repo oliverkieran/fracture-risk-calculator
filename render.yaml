@@ -1,3 +1,5 @@
+previews:
+  generation: manual
 services:
   - type: web
     name: BonoAI-backend
