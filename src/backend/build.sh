@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# exit on error
-set -o errexit
+# Build script for Render deployment
 
-# install dependencies
-python3 -m pip install -r requirements.txt
+set -o errexit  # Exit on error
 
-# run migrations
-python manage.py migrate
+echo "Installing dependencies..."
+pip install --upgrade pip
+pip install -r requirements.txt
+
+echo "Build completed successfully!"

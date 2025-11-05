@@ -8,21 +8,23 @@ This is the source code of Bono AI, a machine learning project that aims to comp
 
 ### Frontend
 
-- Navigate to the `frontend` folder with `cd frontend`
+- Navigate to the `frontend` folder with `cd src/frontend`
 - Install the dependencies with `npm install`
-- Start the development server with `npm start dev`
+- Start the development server with `npm run dev`
 
 ### Backend
 
-- Navigate to the `backend` folder with `cd backend`
-- Create a virtual environment and install all the required dependencies.
-- Setup a local PostgreSQL database and create a new database. You can follow the steps [here](https://djangocentral.com/using-postgresql-with-django/).
-- Create a `.env` file in the `backend` folder and add the following environment variables: `DB_NAME`, `DB_USER`, `DB_PASSWORD` and `DB_HOST`. The values of these variables should be the same as the ones you used when setting up the PostgreSQL database.
-- Run the migrations with `python manage.py migrate`
-- Start the development server with `python manage.py runserver`
+- Navigate to the `backend` folder with `cd src/backend`
+- Create a virtual environment: `python -m venv venv`
+- Activate the virtual environment:
+  - On Linux/Mac: `source venv/bin/activate`
+  - On Windows: `venv\Scripts\activate`
+- Install dependencies: `pip install -r requirements.txt`
+- Start the development server: `uvicorn app.main:app --reload --port 8000`
+- Visit the interactive API documentation at http://localhost:8000/docs
 
-> [!IMPORTANT]
-> Make sure to set the `CORS_ALLOWED_ORIGINS` variable in the `backend/fracture_risk/settings.py` to the address of the frontend. This is necessary to allow cross-origin requests and ensure proper communication between the frontend and backend.
+> [!TIP]
+> The backend is now a stateless API and doesn't require a database. Configuration is managed via environment variables (see `.env.example`).
 
 ## Architecture
 
@@ -32,28 +34,100 @@ The frontend is built with [React](https://react.dev/), TypeScript and [shadcn/u
 
 ### Backend
 
-The backend is built with [Django](https://www.djangoproject.com/). The backend will expose an API via [Django Rest Framework](https://www.django-rest-framework.org/) which will give the frontend the necessary endpoints to request risk scores or SHAP plots. The backend is also responsible for storing the risk scores in a PostgreSQL database. More information on how to install and setup Django with PostgreSQL can be found [here](https://djangocentral.com/using-postgresql-with-django/).
+The backend is built with [FastAPI](https://fastapi.tiangolo.com/), a modern, high-performance Python web framework. The API is stateless and serves ML model predictions via two main endpoints:
 
-#### Dependencies
+- `POST /api/getRisk/` - Calculate fracture risk scores
+- `POST /api/getShapPlot/` - Generate SHAP explainability plots
+
+Key features:
+- **Auto-generated documentation**: Interactive API docs at `/docs` (Swagger UI)
+- **Type safety**: Full Pydantic validation for all inputs
+- **High performance**: ASGI server with async support
+- **Comprehensive testing**: 19 tests covering all endpoints and validation
+
+#### ML Dependencies
 
 - pandas
 - numpy
 - xgboost
-- sksurv
+- scikit-survival
 - shap
-- django
-- django-rest-framework
-- django-cors-headers
-- psycopg2
-- gunicorn
+- matplotlib
+
+#### API Framework
+
+- fastapi
+- uvicorn
+- pydantic
+- pydantic-settings
 
 ### Deployment
 
-The frontend and the backend are deployed separately. Both are deployed on [render](https://render.com/).
+The frontend and the backend are deployed separately. Both are deployed on [Render](https://render.com/).
+
+**Backend deployment** (FastAPI):
+- Build command: `./build.sh`
+- Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 4`
+- Health check: `/health`
+- See `src/backend/render.yaml` for configuration
+
+**Frontend deployment** (Vite/React):
+- Build command: `npm run build`
+- Static site serving
+
+## Testing
+
+### Backend Tests
+
+The backend includes a comprehensive test suite:
+
+```bash
+cd src/backend
+pytest tests/ -v
+```
+
+**19 tests covering**:
+- Risk calculation for all fracture types
+- Input validation for all 48+ patient fields
+- SHAP plot generation
+- Health checks and API documentation
+
+### Frontend Testing
+
+```bash
+cd src/frontend
+npm test
+```
+
+## Project Structure
+
+```
+fracture-risk-calculator/
+├── src/
+│   ├── backend/           # FastAPI backend
+│   │   ├── app/
+│   │   │   ├── main.py           # FastAPI app
+│   │   │   ├── api/              # Endpoints
+│   │   │   ├── models/           # Pydantic models
+│   │   │   └── ml/               # ML risk calculator
+│   │   ├── tests/                # Backend tests
+│   │   ├── requirements.txt
+│   │   └── README.md
+│   └── frontend/          # React frontend
+│       ├── src/
+│       │   ├── components/       # React components
+│       │   ├── context/          # Context providers
+│       │   └── types/            # TypeScript types
+│       ├── package.json
+│       └── README.md
+├── README.md              # This file
+└── render.yaml            # Deployment configuration
+```
 
 ## Notes
 
-- This project is currently being developed. Thus there will be many updates in the near future so make sure to check back frequently.
+- This project is for research purposes and is not recommended for deployment in everyday clinical settings at this time.
+- The backend has been migrated from Django to FastAPI for improved performance and developer experience.
 
 ## Contact
 
