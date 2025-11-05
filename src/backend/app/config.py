@@ -3,7 +3,8 @@ Application configuration and settings
 """
 
 import os
-from typing import List, Optional
+from typing import List, Optional, Union
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -18,8 +19,18 @@ class Settings(BaseSettings):
     )
 
     # CORS Configuration
-    CORS_ORIGINS: List[str] = os.getenv("CORS_ORIGINS", ["http://localhost:5173"])
+    CORS_ORIGINS: Union[List[str], str] = os.getenv(
+        "CORS_ORIGINS", ["http://localhost:5173"]
+    )
     CORS_ORIGIN_REGEX: Optional[str] = os.getenv("CORS_ORIGIN_REGEX", None)
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS_ORIGINS from comma-separated string or list"""
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(",")]
+        return v
 
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
