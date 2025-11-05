@@ -2,7 +2,7 @@
 Application configuration and settings
 """
 import os
-from typing import List
+from typing import List, Optional
 from pydantic_settings import BaseSettings
 
 
@@ -21,7 +21,7 @@ class Settings(BaseSettings):
         "https://www.bonoai.ch",
         "https://bonoai.ch",
     ]
-    CORS_ORIGIN_REGEX: str | None = None
+    CORS_ORIGIN_REGEX: Optional[str] = None
 
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")

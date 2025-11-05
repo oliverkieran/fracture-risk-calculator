@@ -21,7 +21,7 @@ services:
       - key: CORS_ORIGINS
         value: "https://bonoai-frontend.onrender.com,https://www.bonoai.ch,https://bonoai.ch"
       - key: CORS_ORIGIN_REGEX
-        value: "https://bonoai-frontend(-pr-[0-9]+)?\\.onrender\\.com"
+        value: "^https://bonoai-frontend(-pr-[0-9]+)?\\.onrender\\.com$"
 
   # The BonoAI Frontend
   - type: web

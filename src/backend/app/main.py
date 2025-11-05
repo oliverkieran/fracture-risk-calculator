@@ -34,6 +34,8 @@ async def lifespan(app: FastAPI):
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"Debug mode: {settings.DEBUG}")
+    logger.info(f"CORS Origins: {settings.CORS_ORIGINS}")
+    logger.info(f"CORS Origin Regex: {settings.CORS_ORIGIN_REGEX}")
 
     yield
 
