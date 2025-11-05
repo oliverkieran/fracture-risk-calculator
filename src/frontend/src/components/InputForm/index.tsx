@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import axios from "axios";
+import { getApiUrl } from "@/config/api";
 
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -83,13 +84,9 @@ export function InputForm() {
     setSubmittedData(data);
 
     // send data to backend
-    const baseURL = import.meta.env.PROD
-      ? "https://fracture-risk.onrender.com"
-      : "http://localhost:8000";
     axios({
       method: "post",
-      //url: "https://fracture-risk.onrender.com/api/getRisk/",
-      url: baseURL + "/api/getRisk/",
+      url: getApiUrl("getRisk"),
       data: requestData,
     }).then((response) => {
       console.log("Received response from backend:", response.data);
