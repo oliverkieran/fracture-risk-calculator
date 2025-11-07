@@ -27,3 +27,6 @@ __pycache__
 *.sw?
 
 *.ipynb
+
+# Archived files
+archive/*
