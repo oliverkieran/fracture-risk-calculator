@@ -4,6 +4,7 @@ BonoAI Fracture Risk Calculator - FastAPI Application
 A high-performance ML-powered API for calculating osteoporotic fracture risk
 in postmenopausal women.
 """
+
 import logging
 import sys
 from contextlib import asynccontextmanager
@@ -19,7 +20,7 @@ from app.api import router
 logging.basicConfig(
     level=getattr(logging, settings.LOG_LEVEL),
     format="%(levelname)s %(asctime)s [%(name)s] %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)]
+    handlers=[logging.StreamHandler(sys.stdout)],
 )
 
 logger = logging.getLogger(__name__)
@@ -35,7 +36,6 @@ async def lifespan(app: FastAPI):
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"Debug mode: {settings.DEBUG}")
     logger.info(f"CORS Origins: {settings.CORS_ORIGINS}")
-    logger.info(f"CORS Origin Regex: {settings.CORS_ORIGIN_REGEX}")
 
     yield
 
@@ -58,7 +58,6 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
-    allow_origin_regex=settings.CORS_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
@@ -80,8 +79,8 @@ async def health_check():
         content={
             "status": "healthy",
             "version": settings.APP_VERSION,
-            "environment": settings.ENVIRONMENT
-        }
+            "environment": settings.ENVIRONMENT,
+        },
     )
 
 
@@ -110,10 +109,7 @@ async def global_exception_handler(request, exc):
     logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
     return JSONResponse(
         status_code=500,
-        content={
-            "detail": "Internal server error",
-            "type": type(exc).__name__
-        }
+        content={"detail": "Internal server error", "type": type(exc).__name__},
     )
 
 
@@ -125,5 +121,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8000,
         reload=settings.DEBUG,
-        log_level=settings.LOG_LEVEL.lower()
+        log_level=settings.LOG_LEVEL.lower(),
     )

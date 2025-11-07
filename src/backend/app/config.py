@@ -22,7 +22,6 @@ class Settings(BaseSettings):
     CORS_ORIGINS: Union[List[str], str] = os.getenv(
         "CORS_ORIGINS", ["http://localhost:5173"]
     )
-    CORS_ORIGIN_REGEX: Optional[str] = os.getenv("CORS_ORIGIN_REGEX", None)
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
