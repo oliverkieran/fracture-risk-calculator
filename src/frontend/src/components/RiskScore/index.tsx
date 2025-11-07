@@ -29,6 +29,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { FormSchemaType } from "@/types/types";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { getApiUrl } from "@/config/api";
 
 type ShapPlotProps = {
   riskHorizon: string;
@@ -61,12 +62,9 @@ export function SHAPDialog({ riskHorizon, data }: ShapPlotProps) {
     };
 
     console.log("Creating SHAP plot");
-    const baseURL = import.meta.env.PROD
-      ? "https://fracture-risk.onrender.com"
-      : "http://localhost:8000";
     axios({
       method: "post",
-      url: baseURL + "/api/getShapPlot/",
+      url: getApiUrl("getShapPlot"),
       data: requestData,
     })
       .then((response) => {
